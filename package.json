@@ -1,4 +1,36 @@
 {
-  "name": "application-name",
-  "version": "0.0.1"
+  "name": "@moooji/oEmbed",
+  "version": "0.10.1",
+  "description": "oEmbed provider",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node --harmony main.js"
+  },
+  "engines": {
+    "node": ">=0.12.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moooji/oEmbed.git"
+  },
+  "keywords": [
+    "oEmbed",
+    "youtube",
+    "vimeo"
+  ],
+  "author": "Steffen Strätz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moooji/oEmbed/issues"
+  },
+  "dependencies": {
+    "custom-error-generator": "^7.0.0",
+    "lodash": "^3.9.3",
+    "request": "^2.60.0"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "mocha": "^2.2.5"
+  }
 }
