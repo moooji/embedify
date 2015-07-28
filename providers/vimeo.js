@@ -10,22 +10,14 @@ const regExp = [
     /https?:\/\/(?:player\.)?vimeo\.com\/\w*\/*(([a-z]{0,2}-)?\d+)/i
 ];
 
-const tests = [
-    {
-        url: 'https://player.vimeo.com/video/132252780',
-        match: true
-    },
-    {
-        url: 'https://www.vimeo.com/video/132252780',
-        match: true
-    },
-    {
-        url: 'https://youtu.be/iOf7CsxmFCs',
-        match: false
-    }];
-
-function transform(match) {
+const transform = function (match) {
     return "https://www.vimeo.com/" + match[1];
-}
+};
 
-module.exports = provider(name, apiUrl, regExp, tests, { transform: transform });
+const vimeo = provider(name, apiUrl, regExp, transform);
+
+vimeo.addTest('https://player.vimeo.com/video/132252780', true);
+vimeo.addTest('https://www.vimeo.com/video/132252780', true);
+vimeo.addTest('https://youtu.be/iOf7CsxmFCs', false);
+
+module.exports = vimeo;

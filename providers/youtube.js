@@ -16,26 +16,15 @@ const regExp = [
     /https?:\/\/www\.youtube-nocookie\.com\/v\/([a-zA-Z0-9_-]+)/i
 ];
 
-const tests = [
-    {
-        url: 'https://www.youtube.com/embed/iOf7CsxmFCs',
-        match: true
-    },
-    {
-        url: 'https://www.youtube.com/watch?v=iOf7CsxmFCs',
-        match: true
-    },
-    {
-        url: 'https://youtu.be/iOf7CsxmFCs',
-        match: true
-    },
-    {
-        url: 'https://player.vimeo.com/video/132252780',
-        match: false
-    }];
-
-function transform(match) {
+const transform = function (match) {
     return "https://www.youtube.com/watch?v=" + match[1];
-}
+};
 
-module.exports = provider(name, apiUrl, regExp, tests, { transform: transform });
+const youtube = provider(name, apiUrl, regExp, transform);
+
+youtube.addTest('https://www.youtube.com/embed/iOf7CsxmFCs', true);
+youtube.addTest('https://www.youtube.com/watch?v=iOf7CsxmFCs', true);
+youtube.addTest('https://youtu.be/iOf7CsxmFCs', true);
+youtube.addTest('https://player.vimeo.com/video/132252780', false);
+
+module.exports = youtube;
