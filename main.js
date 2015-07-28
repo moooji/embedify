@@ -74,4 +74,4 @@ module.exports.get = get;
 module.exports.providers = getProviders();
 module.exports.InvalidArgumentError = InvalidArgumentError;
 module.exports.ApiRequestError = ApiRequestError;
-module .exports.UrlMatchError = UrlMatchError;
+module.exports.UrlMatchError = UrlMatchError;
