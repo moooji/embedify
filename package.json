@@ -20,8 +20,7 @@
     "vimeo"
   ],
   "author": "Steffen Strätz",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/moooji/embedify/issues"
   },
