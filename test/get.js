@@ -50,7 +50,7 @@ describe('Get', function() {
 
     it('should return InvalidArgumentError if url is malformed', function () {
 
-        const url = "http://embed/iOf7CsxmFCt";
+        const url = "http:://embed/iOf7CsxmFCt";
         return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
     });
 
@@ -66,7 +66,7 @@ _.forOwn(oEmbed.providers, function(provider, providerName) {
 
     if (provider.tests && provider.tests.length) {
 
-        describe('Provider - ' + providerName, function () {
+        describe('Get [' + providerName + ']', function () {
 
             // Iterate through all tests defined for plugin
             for (let i = 0; i < provider.tests.length; i++) {
@@ -79,7 +79,7 @@ _.forOwn(oEmbed.providers, function(provider, providerName) {
                     return expect(oEmbed.get(test.url, test.options))
                         .to.eventually.be.fulfilled
                         .then(function (result) {
-                            expect(result).to.deep.equal(test.get);
+                            return expect(result).to.deep.equal(test.get);
                         });
                 });
             }

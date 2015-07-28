@@ -29,7 +29,8 @@
     "bluebird": "^2.9.33",
     "custom-error-generator": "^7.0.0",
     "lodash": "^3.9.3",
-    "request": "^2.60.0"
+    "request": "^2.60.0",
+    "url-extended": "^0.10.21"
   },
   "devDependencies": {
     "chai": "^3.0.0",
