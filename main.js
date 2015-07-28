@@ -3,6 +3,7 @@
 const fs = require("fs");
 const _ = require("lodash");
 const Promise = require("bluebird");
+const url = require("url-extended");
 
 const InvalidArgumentError = require("./lib/errors").InvalidArgumentError;
 const ApiRequestError = require("./lib/errors").ApiRequestError;
@@ -18,26 +19,29 @@ const providers = requireProviders();
  */
 function get(embedUrl, callback) {
 
-    let result = null;
+    return Promise.resolve(embedUrl)
+        .then(function (embedUrl) {
 
-    return Promise.resolve(providers)
-        .each(function(provider) {
-
-            if(result) {
-                return;
-            }
-
-            return provider.get(embedUrl)
-                .then(function(providerResult) {
-                    result = providerResult;
-                })
-                .catch(UrlMatchError, function(err) {
-                    // Just continue with next provider...
-                });
+            // Parse url to ensure that it is absolute and valid http(s),
+            // otherwise throw InvalidArgumentError.
+            //
+            // Using 'url-extended' package:
+            // url.parse(urlString, validateAbsolute, validateHttp)
+            const parsedUrl = url.parse(embedUrl, true, true);
+            return parsedUrl.href;
         })
-        .then(function() {
-            return result;
+        .catch(url.InvalidArgumentError, function (err) {
+
+            // Wrap and rethrow
+            throw new InvalidArgumentError(err);
         })
+        .then(function(embedUrl) {
+
+            return _.map(providers, function(provider) {
+               return provider.get(embedUrl);
+            });
+        })
+        .any()
         .nodeify(callback);
 }
 

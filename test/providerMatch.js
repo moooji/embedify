@@ -44,49 +44,4 @@ for (let provider of embedify.providers) {
             }
         });
     }
-
-    describe('Match [' + provider.name + '] Errors', function() {
-
-        it('should return InvalidArgumentError if embedUrl is null', function () {
-
-            const embedUrl = null;
-            return expect(provider.get(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-        });
-
-        it('should return InvalidArgumentError if embedUrl is undefined', function () {
-
-            const embedUrl = undefined;
-            return expect(provider.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-        });
-
-        it('should return InvalidArgumentError if embedUrl is number', function () {
-
-            const embedUrl = 123;
-            return expect(provider.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-        });
-
-        it('should return InvalidArgumentError if embedUrl is object', function () {
-
-            const embedUrl = {};
-            return expect(provider.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-        });
-
-        it('should return InvalidArgumentError if embedUrl is array', function () {
-
-            const embedUrl = [];
-            return expect(provider.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-        });
-
-        it('should return InvalidArgumentError if embedUrl is not absolute', function () {
-
-            const embedUrl = "/embed/iOf7CsxmFCt";
-            return expect(provider.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-        });
-
-        it('should return InvalidArgumentError if embedUrl is malformed', function () {
-
-            const embedUrl = "http:://embed/iOf7CsxmFCt";
-            return expect(provider.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-        });
-    });
 }
