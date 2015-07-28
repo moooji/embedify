@@ -62,7 +62,7 @@ _.forOwn(oEmbed.providers, function(provider, providerName) {
 
         describe('Provider - ' + providerName, function () {
 
-            // Iterate through all tests defined for plugin
+            // Iterate through provider's tests
             for (let i = 0; i < provider.tests.length; i++) {
 
                 const test = provider.tests[i];
