@@ -1,5 +1,5 @@
 {
-  "name": "@moooji/oEmbed",
+  "name": "embedify",
   "version": "0.10.1",
   "description": "oEmbed provider",
   "main": "main.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/moooji/oEmbed.git"
+    "url": "https://github.com/moooji/embedify.git"
   },
   "keywords": [
     "oEmbed",
@@ -23,7 +23,7 @@
   "license": "UNLICENSED",
   "private": true,
   "bugs": {
-    "url": "https://github.com/moooji/oEmbed/issues"
+    "url": "https://github.com/moooji/embedify/issues"
   },
   "dependencies": {
     "bluebird": "^2.9.33",

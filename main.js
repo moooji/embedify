@@ -41,11 +41,16 @@ function match(embedUrl) {
         .then(function (embedUrl) {
 
             let result = null;
-            const parsedUrl = url.parse(embedUrl, true, true, true);
+
+            // Parse url to ensure that it is absolute and valid http(s),
+            // otherwise throw InvalidArgumentError.
+            //
+            // Using 'url-extended' package:
+            // url.parse(urlString, validateAbsolute, validateHttp)
+            const parsedUrl = url.parse(embedUrl, true, true);
 
             // Iterate through all providers
-            // and match url against regExp
-
+            // and match url against provider's regExp
             _.forOwn(providers, function(provider, providerName) {
 
                 // Iterate through provider's regExp
@@ -59,7 +64,7 @@ function match(embedUrl) {
                     }
                 }
 
-                // Return after first match
+                // Return after first provider match
                 if (result) {
                     return result;
                 }
@@ -69,7 +74,7 @@ function match(embedUrl) {
         })
         .catch(url.InvalidArgumentError, function (err) {
 
-            // Wrap an rethrow url argument errors
+            // Wrap and rethrow
             throw new InvalidArgumentError(err);
         });
 }
