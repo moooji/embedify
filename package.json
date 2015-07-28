@@ -25,6 +25,7 @@
     "url": "https://github.com/moooji/oEmbed/issues"
   },
   "dependencies": {
+    "bluebird": "^2.9.33",
     "custom-error-generator": "^7.0.0",
     "lodash": "^3.9.3",
     "request": "^2.60.0"
