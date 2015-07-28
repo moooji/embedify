@@ -87,7 +87,7 @@ _.forOwn(embedify.providers, function(provider, providerName) {
                         return expect(provider.get(test.url))
                             .to.eventually.be.fulfilled
                             .then(function (result) {
-                                return expect(result).to.deep.equal(test.result);
+                                return expect(result.type).to.be.string;
                             });
                     }
                     else {
