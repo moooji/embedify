@@ -6,7 +6,7 @@ const _ = require("lodash");
 
 const createError = require("custom-error-generator");
 const InvalidArgumentError = createError('InvalidArgumentError');
-const plugins = requirePlugins();
+const providers = requireProviders();
 
 /**
  * Get the oEmbed information for a URL
@@ -17,38 +17,86 @@ const plugins = requirePlugins();
 function get(url, callback) {
 
     return Promise.resolve(url)
+        .then(function(url) {
+
+            /*
+            for (let provider of providers) {
+
+                if(provider.match(url)) {
+                    return plugin.get(url);
+                }
+            }
+            */
+        })
         .nodeify(callback);
 }
 
 /**
- * Requires all plugins in the plugin directory
- * @returns {Array}
+ * Match url with provider regExp
+ * @param {String} url
+ * @returns {String}
  */
-function requirePlugins() {
+function match(url) {
 
-    let plugins = [];
-    const pluginDir = "./plugins";
-    const pluginFiles = fs.readdirSync(pluginDir);
+    let result = null;
 
-    for (let pluginFile of pluginFiles) {
-        const pluginPath = pluginDir + "/" + pluginFile;
-        plugins.push(require(pluginPath));
-    }
+    // Iterate through all providers
+    // and match url against regExp
 
-    return plugins;
+    _.forOwn(providers, function(provider, providerName) {
+
+        // Iterate through provider's regExp
+        for (let re of provider.regExp) {
+
+            const match = url.match(re);
+
+            if (match && match.length) {
+                result = providerName;
+                return;
+            }
+        }
+
+        // Return after first match
+        if (result) {
+            return result;
+        }
+    });
+
+    return result;
 }
 
 /**
- * Getter for plugins
- * @returns {Array}
+ * Requires all providers
+ * @returns {Object}
  */
-function getPlugins() {
-    return plugins;
+function requireProviders() {
+
+    let result = {};
+    const providerDir = "./providers";
+    const providerFiles = fs.readdirSync(providerDir);
+
+    for (let providerFile of providerFiles) {
+
+        const providerName = providerFile.split(".")[0].toLowerCase();
+        const providerPath = providerDir + "/" + providerFile;
+        result[providerName] = require(providerPath);
+    }
+
+    return result;
+}
+
+/**
+ * Getter for providers
+ * @returns {Object}
+ */
+function getProviders() {
+    return providers;
 }
 
 // Public
 module.exports.get = get;
-module.exports.plugins = getPlugins();
+module.exports.match = match;
+module.exports.providers = getProviders();
 
 // Errors
 module.exports.InvalidArgumentError = InvalidArgumentError;

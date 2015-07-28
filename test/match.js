@@ -10,54 +10,48 @@ const expect = chai.expect;
 const should = chai.should;
 chai.use(chaiAsPromised);
 
-describe('Get', function() {
+describe('Match', function() {
 
     it('should return InvalidArgumentError if url is null', function () {
 
         const url = null;
-        return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
+        return expect(oEmbed.match(url)).to.throw(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if url is undefined', function () {
 
         const url = undefined;
-        return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
+        return expect(oEmbed.match(url)).to.throw(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if url is number', function () {
 
         const url = 123;
-        return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
+        return expect(oEmbed.match(url)).to.throw(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if url is object', function () {
 
         const url = {};
-        return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
+        return expect(oEmbed.match(url)).to.throw(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if url is array', function () {
 
         const url = [];
-        return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
+        return expect(oEmbed.match(url)).to.throw(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if url is not absolute', function () {
 
         const url = "/embed/iOf7CsxmFCt";
-        return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
+        return expect(oEmbed.match(url)).to.throw(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if url is malformed', function () {
 
         const url = "http://embed/iOf7CsxmFCt";
-        return expect(oEmbed.get(url)).to.be.rejectedWith(InvalidArgumentError);
-    });
-
-    it('should return result if url is valid', function () {
-
-        const url = "http://www.youtube.com/embed/iOf7CsxmFCt";
-        return expect(oEmbed.get(url)).to.eventually.be.fulfilled;
+        return expect(oEmbed.match(url)).to.throw(InvalidArgumentError);
     });
 });
 
@@ -76,11 +70,13 @@ _.forOwn(oEmbed.providers, function(provider, providerName) {
 
                 it('should pass test ' + numTest, function () {
 
-                    return expect(oEmbed.get(test.url, test.options))
-                        .to.eventually.be.fulfilled
-                        .then(function (result) {
-                            expect(result).to.deep.equal(test.get);
-                        });
+                    if (test.match === true) {
+                        const match = oEmbed.match(test.url);
+                        expect(match).to.equal(providerName);
+                    }
+                    else {
+                        expect(oEmbed.match(test.url)).to.not.equal(providerName);
+                    }
                 });
             }
         });
