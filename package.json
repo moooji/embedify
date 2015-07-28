@@ -1,6 +1,6 @@
 {
   "name": "embedify",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "oEmbed provider",
   "main": "main.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "custom-error-generator": "^7.0.0",
     "lodash": "^3.9.3",
     "request": "^2.60.0",
-    "url-extended": "^0.10.22"
+    "url-extended": "^0.10.23"
   },
   "devDependencies": {
     "chai": "^3.0.0",
