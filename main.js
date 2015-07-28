@@ -10,10 +10,10 @@ const InvalidArgumentError = createError('InvalidArgumentError');
 const providers = requireProviders();
 
 /**
- * Get the oEmbed information for a URL
+ * Gets the oEmbed information for a URL
  * @param {String} embedUrl
  * @param {Function} [callback]
- * @returns {Promise}
+ * @returns {Promise || Function}
  */
 function get(embedUrl, callback) {
 
@@ -31,9 +31,9 @@ function get(embedUrl, callback) {
 }
 
 /**
- * Match url with provider regExp
+ * Matches url with provider regExp
  * @param {String} embedUrl
- * @returns {String}
+ * @returns {Promise || Function}
  */
 function match(embedUrl) {
 
@@ -76,7 +76,8 @@ function match(embedUrl) {
 
             // Wrap and rethrow
             throw new InvalidArgumentError(err);
-        });
+        })
+        .nodeify(callback);
 }
 
 /**
