@@ -7,6 +7,7 @@ const embedify = require('../main');
 
 const InvalidArgumentError = embedify.InvalidArgumentError;
 const ApiRequestError = embedify.ApiRequestError;
+const UrlMatchError = embedify.UrlMatchError;
 
 const expect = chai.expect;
 const should = chai.should;
@@ -58,8 +59,12 @@ describe('Get', function() {
 
     it('should return result if url is valid', function () {
 
-        const url = "http://www.youtube.com/embed/iOf7CsxmFCt";
-        return expect(embedify.get(url)).to.eventually.be.fulfilled;
+        const url = "https://www.youtube.com/embed/iOf7CsxmFCs";
+        return expect(embedify.get(url))
+            .to.eventually.be.fulfilled
+            .then(function (result) {
+                return expect(result.type).to.equal("video");
+            });
     });
 });
 
@@ -78,11 +83,17 @@ _.forOwn(embedify.providers, function(provider, providerName) {
 
                 it('should pass test ' + numTest, function () {
 
-                    return expect(embedify.get(test.url))
-                        .to.eventually.be.fulfilled
-                        .then(function (result) {
-                            return expect(result).to.deep.equal(test.result);
-                        });
+                    if(test.match) {
+                        return expect(provider.get(test.url))
+                            .to.eventually.be.fulfilled
+                            .then(function (result) {
+                                return expect(result).to.deep.equal(test.result);
+                            });
+                    }
+                    else {
+                        return expect(provider.get(test.url))
+                            .to.be.rejectedWith(UrlMatchError);
+                    }
                 });
             }
         });

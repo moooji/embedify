@@ -35,6 +35,9 @@ function get(embedUrl, callback) {
                     // Just continue with next provider...
                 });
         })
+        .then(function() {
+            return result;
+        })
         .nodeify(callback);
 }
 
