@@ -31,15 +31,15 @@ function get(url) {
 
 const tests = [
     {
-        content: '<iframe src="https://player.vimeo.com/video/132252780" width="600" height="338" frameborder="0" title="We Are Royale - Manifesto"></iframe>',
+        url: '<iframe src="https://player.vimeo.com/video/132252780" width="600" height="338" frameborder="0" title="We Are Royale - Manifesto"></iframe>',
         result: [{ id: "132252780", url: "https://player.vimeo.com/video/132252780"}]
     },
     {
-        content: '<a href="https://player.vimeo.com/video/132252780">Video</a>',
+        url: '<a href="https://player.vimeo.com/video/132252780">Video</a>',
         result: [{ id: "132252780", url: "https://player.vimeo.com/video/132252780"}]
     },
     {
-        content: '<a href="https://player.vimeo.com/video/132252780">Video</a><a href="https://player.vimeo.com/video/132252781">Video</a>',
+        url: '<a href="https://player.vimeo.com/video/132252780">Video</a><a href="https://player.vimeo.com/video/132252781">Video</a>',
         result: [
             {
                 id: "132252780",
@@ -51,7 +51,7 @@ const tests = [
             }]
     },
     {
-        content: '<a href="https://player.vimeo.com/video/132252780">Video</a><a href="https://www.vimeo.com/video/132252780">Video</a>',
+        url: '<a href="https://player.vimeo.com/video/132252780">Video</a><a href="https://www.vimeo.com/video/132252780">Video</a>',
         result: [
             {
                 id: "132252780",
