@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require("fs");
+const path = require("path");
 const _ = require("lodash");
 const Promise = require("bluebird");
 const url = require("url-extended");
@@ -37,11 +38,43 @@ function get(embedUrl, callback) {
         })
         .then(function(embedUrl) {
 
-            return _.map(providers, function(provider) {
-               return provider.get(embedUrl);
+            return _.map(_.keys(providers), function(providerName) {
+               return providers[providerName].get(embedUrl);
             });
         })
         .any()
+        .nodeify(callback);
+}
+
+function match(embedUrl, callback) {
+
+    return Promise.resolve(embedUrl)
+        .then(function (embedUrl) {
+
+            // Parse url to ensure that it is absolute and valid http(s),
+            // otherwise throw InvalidArgumentError.
+            //
+            // Using 'url-extended' package:
+            // url.parse(urlString, validateAbsolute, validateHttp)
+            const parsedUrl = url.parse(embedUrl, true, true);
+            return parsedUrl.href;
+        })
+        .catch(url.InvalidArgumentError, function (err) {
+
+            // Wrap and rethrow
+            throw new InvalidArgumentError(err);
+        })
+        .then(function(embedUrl) {
+
+            return _.map(_.keys(providers), function(providerName) {
+                return providers[providerName].match(embedUrl);
+            });
+        })
+        .any()
+        .then(function(res){
+            console.log(res);
+            return res;
+        })
         .nodeify(callback);
 }
 
@@ -51,15 +84,16 @@ function get(embedUrl, callback) {
  */
 function requireProviders() {
 
-    let result = [];
+    const result = {};
     const providerDir = __dirname + "/providers";
     const providerFiles = fs.readdirSync(providerDir);
 
     for (let providerFile of providerFiles) {
 
         const providerPath = providerDir + "/" + providerFile;
-        const provider = require(providerPath);
-        result.push(provider);
+        const parsedPath = path.parse(providerPath);
+
+        result[parsedPath.name] = require(providerPath);
     }
 
     return result;
@@ -75,6 +109,7 @@ function getProviders() {
 
 // Public
 module.exports.get = get;
+module.exports.match = match;
 module.exports.providers = getProviders();
 module.exports.InvalidArgumentError = InvalidArgumentError;
 module.exports.ApiRequestError = ApiRequestError;

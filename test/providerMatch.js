@@ -1,5 +1,6 @@
 "use strict";
 
+const _ = require("lodash");
 const chai = require('chai');
 const chaiAsPromised = require("chai-as-promised");
 const embedify = require('../main');
@@ -13,11 +14,11 @@ const should = chai.should;
 chai.use(chaiAsPromised);
 
 // Iterate through all providers
-for (let provider of embedify.providers) {
+_.forOwn(embedify.providers, function(provider, providerName) {
 
     if (provider.tests && provider.tests.length) {
 
-        describe('Match [' + provider.name + ']', function () {
+        describe('Match [' + providerName + ']', function () {
 
             // Iterate through all tests defined for plugin
             for (let i = 0; i < provider.tests.length; i++) {
@@ -44,4 +45,4 @@ for (let provider of embedify.providers) {
             }
         });
     }
-}
+});
