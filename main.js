@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
 const Promise = require("bluebird");
-const url = require("url-extended");
 
 const InvalidArgumentError = require("./lib/errors").InvalidArgumentError;
 const ApiRequestError = require("./lib/errors").ApiRequestError;
@@ -14,45 +13,47 @@ const providers = requireProviders();
 
 /**
  * Gets the oEmbed information for a URL
- * @param {String} embedUrl
+ * @param {String|Array} matchUrls
  * @param {Function} [callback]
  * @returns {Promise|Function}
  */
-function get(embedUrl, callback) {
+function get(matchUrls, callback) {
 
-    return Promise.resolve(embedUrl)
+    return Promise.resolve(matchUrls)
         .then(match)
-        .then(function(res) {
-            return providers[res.providerName].fetch(res.embedUrl);
+        .then(function(matches) {
+
+            return _.map(matches, function(match) {
+                return providers[match.providerName].fetch(match.embedUrl);
+            });
         })
+        .all()
         .nodeify(callback);
 }
 
-
 /**
  * Return matching provider and transformed embed URL
- * @param {String} matchUrl
+ * @param {String|Array} matchUrls
  * @param {Function} [callback]
  * @returns {Promise}
  */
-function match(matchUrl, callback) {
+function match(matchUrls, callback) {
+
+    return Promise.resolve(matchUrls)
+        .then(sanitizeMatchUrls)
+        .then(function(matchUrls) {
+
+            return _.map(matchUrls, function(matchUrl) {
+                return matchOne(matchUrl);
+            });
+        })
+        .all()
+        .nodeify(callback);
+}
+
+function matchOne(matchUrl) {
 
     return Promise.resolve(matchUrl)
-        .then(function (matchUrl) {
-
-            // Parse url to ensure that it is absolute and valid http(s),
-            // otherwise throw InvalidArgumentError.
-            //
-            // Using 'url-extended' package:
-            // url.parse(urlString, validateAbsolute, validateHttp)
-            const parsedUrl = url.parse(matchUrl, true, true);
-            return parsedUrl.href;
-        })
-        .catch(url.InvalidArgumentError, function (err) {
-
-            // Wrap and rethrow
-            throw new InvalidArgumentError(err);
-        })
         .then(function(matchUrl) {
 
             return _.map(_.keys(providers), function(providerName) {
@@ -64,11 +65,10 @@ function match(matchUrl, callback) {
                             providerName: providerName,
                             embedUrl: embedUrl
                         }
-                    })
+                    });
             });
         })
         .any()
-        .nodeify(callback);
 }
 
 /**
@@ -90,6 +90,31 @@ function requireProviders() {
     }
 
     return result;
+}
+
+/**
+ * Ensures that matchUrls is array of URLs
+ * @param {String|Array} matchUrls
+ * @returns {Array}
+ */
+function sanitizeMatchUrls(matchUrls) {
+
+    if (_.isString(matchUrls)) {
+        matchUrls = [matchUrls];
+    }
+
+    if (!_.isArray(matchUrls)) {
+        throw new InvalidArgumentError("Invalid match URLs - should be string or array");
+    }
+
+    for (let matchUrl of matchUrls) {
+
+        if (!_.isString(matchUrl)) {
+            throw new InvalidArgumentError("Invalid match URL - should be string");
+        }
+    }
+
+    return matchUrls;
 }
 
 /**

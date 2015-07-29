@@ -14,17 +14,41 @@ chai.use(chaiAsPromised);
 
 describe('Embedify Match', function() {
 
-    it('should return result if embedUrl is valid string', function () {
+    it('should return result if matchUrls is valid string', function () {
 
-        const matchUrl = "https://www.youtube.com/embed/iOf7CsxmFCs";
-        const expectedResult = {
+        const matchUrls = "https://www.youtube.com/embed/iOf7CsxmFCs";
+        const expectedResult = [{
             providerName: "youtube",
             embedUrl: "https://www.youtube.com/watch?v=iOf7CsxmFCs"
-        };
+        }];
 
-        return expect(embedify.match(matchUrl))
+        return expect(embedify.match(matchUrls))
             .to.eventually.be.fulfilled
-            .then(function(result){
+            .then(function(result) {
+                return expect(result).to.deep.equal(expectedResult);
+            });
+    });
+
+    it('should return result if matchUrls is valid array', function () {
+
+        const matchUrls = [
+            "https://www.youtube.com/embed/iOf7CsxmFCs",
+            "https://www.youtube.com/watch?v=nfWlot6h_JM"
+        ];
+
+        const expectedResult = [
+            {
+                providerName: "youtube",
+                embedUrl: "https://www.youtube.com/watch?v=iOf7CsxmFCs"
+            },
+            {
+                providerName: "youtube",
+                embedUrl: "https://www.youtube.com/watch?v=nfWlot6h_JM"
+            }];
+
+        return expect(embedify.match(matchUrls))
+            .to.eventually.be.fulfilled
+            .then(function(result) {
                 return expect(result).to.deep.equal(expectedResult);
             });
     });
@@ -56,21 +80,9 @@ describe('Embedify Match Errors', function() {
         return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
     });
 
-    it('should return InvalidArgumentError if embedUrl is array', function () {
+    it('should return InvalidArgumentError if embedUrl is non-string array', function () {
 
-        const embedUrl = [];
-        return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-    });
-
-    it('should return InvalidArgumentError if embedUrl is not absolute', function () {
-
-        const embedUrl = "/embed/iOf7CsxmFCt";
-        return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-    });
-
-    it('should return InvalidArgumentError if embedUrl is malformed', function () {
-
-        const embedUrl = "http:://embed/iOf7CsxmFCt";
+        const embedUrl = [123, {}];
         return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
     });
 });

@@ -14,13 +14,59 @@ chai.use(chaiAsPromised);
 
 describe('Embedify Get', function() {
 
-    it('should return result if embedUrl is valid string', function () {
+    it('should return result if matchUrls is valid string', function () {
 
-        const embedUrl = "https://www.youtube.com/embed/iOf7CsxmFCs";
-        return expect(embedify.get(embedUrl))
+        const matchUrls = "https://www.youtube.com/embed/iOf7CsxmFCs";
+        return expect(embedify.get(matchUrls))
             .to.eventually.be.fulfilled
             .then(function (result) {
-                return expect(result.type).to.equal("video");
+                return expect(result[0].type).to.equal("video");
+            });
+    });
+
+    it('should return result if matchUrls is valid array', function () {
+
+        const matchUrls = [
+            "https://www.youtube.com/embed/iOf7CsxmFCs",
+            "https://www.youtube.com/watch?v=nfWlot6h_JM"
+        ];
+
+        const expectedResult = [
+            {
+                type: 'video',
+                thumbnail_height: 360,
+                thumbnail_url: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
+                provider_url: 'https://www.youtube.com/',
+                provider_name: 'YouTube',
+                width: 480,
+                thumbnail_width: 480,
+                title: '☼ Min sommer road trip | Del 1 ☼',
+                author_url: 'https://www.youtube.com/user/AmandaS4G',
+                version: '1.0',
+                author_name: 'Amanda MIDK',
+                height: 270,
+                html: '<iframe width="480" height="270" src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" frameborder="0" allowfullscreen></iframe>'
+            },
+            {
+                author_name: "TaylorSwiftVEVO",
+                author_url: "https://www.youtube.com/user/TaylorSwiftVEVO",
+                height: 270,
+                html: "<iframe width=\"480\" height=\"270\" src=\"https://www.youtube.com/embed/nfWlot6h_JM?feature=oembed\" frameborder=\"0\" allowfullscreen></iframe>",
+                provider_name: "YouTube",
+                provider_url: "https://www.youtube.com/",
+                thumbnail_height: 360,
+                thumbnail_url: "https://i.ytimg.com/vi/nfWlot6h_JM/hqdefault.jpg",
+                thumbnail_width: 480,
+                title: "Taylor Swift - Shake It Off",
+                type: "video",
+                version: "1.0",
+                width: 480
+            }];
+
+        return expect(embedify.get(matchUrls))
+            .to.eventually.be.fulfilled
+            .then(function(result) {
+                return expect(result).to.deep.equal(expectedResult);
             });
     });
 });
@@ -51,21 +97,9 @@ describe('Embedify Get Errors', function() {
         return expect(embedify.get(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
     });
 
-    it('should return InvalidArgumentError if embedUrl is array', function () {
+    it('should return InvalidArgumentError if embedUrl is non-string array', function () {
 
-        const embedUrl = [];
-        return expect(embedify.get(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-    });
-
-    it('should return InvalidArgumentError if embedUrl is not absolute', function () {
-
-        const embedUrl = "/embed/iOf7CsxmFCt";
-        return expect(embedify.get(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
-    });
-
-    it('should return InvalidArgumentError if embedUrl is malformed', function () {
-
-        const embedUrl = "http:://embed/iOf7CsxmFCt";
+        const embedUrl = [123, {}];
         return expect(embedify.get(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
     });
 });
