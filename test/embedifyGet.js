@@ -74,6 +74,7 @@ describe('Embedify Get', function() {
 
         const matchUrls = [
             "https://www.youtube.com/embed/iOf7CsxmFCs",
+            "https://www.youtube.com/embed/iOf7CsxmFCs",
             "https://www.youtube.com/watch?v=iOf7CsxmFCs"
         ];
 
