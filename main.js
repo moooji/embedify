@@ -1,7 +1,6 @@
 "use strict";
 
 const fs = require("fs");
-const path = require("path");
 const _ = require("lodash");
 const Promise = require("bluebird");
 
@@ -23,22 +22,11 @@ function get(matchUrls, callback) {
         .then(match)
         .then(function(matches) {
 
-            const uniqueMatches = [];
-            const promiseCollection = [];
+            return _.map(matches, function(match) {
 
-            for (let match of matches) {
-
-                if (!_.where(uniqueMatches, match).length) {
-
-                    const provider = providers[match.providerName];
-                    const fetchPromise = provider.fetch(match.embedUrl);
-
-                    uniqueMatches.push(match);
-                    promiseCollection.push(fetchPromise);
-                }
-            }
-
-            return promiseCollection;
+                const provider = providers[match.providerName];
+                return provider.fetch(match.embedUrl);
+            });
         })
         .all()
         .nodeify(callback);
@@ -61,6 +49,8 @@ function match(matchUrls, callback) {
             });
         })
         .all()
+        .then(mergeMatchResults)
+        .then(sanitizeMatchResults)
         .nodeify(callback);
 }
 
@@ -75,18 +65,50 @@ function matchOne(matchUrl) {
         .then(function(matchUrl) {
 
             return _.map(_.keys(providers), function(providerName) {
-
-                return providers[providerName].match(matchUrl)
-                    .then(function(embedUrl) {
-
-                        return {
-                            providerName: providerName,
-                            embedUrl: embedUrl
-                        }
-                    });
+                return providers[providerName].match(matchUrl);
             });
         })
-        .any()
+        .all()
+}
+
+/**
+ * Merges match results from different URLs
+ * @param {Array} matchResults
+ * @returns {Array}
+ */
+function mergeMatchResults(matchResults) {
+
+    let result = [];
+
+    for (let item of matchResults) {
+
+        if (_.isArray(item)) {
+            result = _.union(result, item);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Ensures that match results are unique and valid
+ * @param {Array} matchResults
+ * @returns {Array}
+ */
+function sanitizeMatchResults(matchResults) {
+
+    const result = [];
+
+    for (let matchResult of matchResults) {
+
+        if (matchResult !== null &&
+            matchResult !== undefined &&
+            _.where(result, matchResult).length === 0) {
+            result.push(matchResult);
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -95,19 +117,18 @@ function matchOne(matchUrl) {
  */
 function requireProviders() {
 
-    const result = {};
+    const providers = {};
     const providerDir = __dirname + "/providers";
     const providerFiles = fs.readdirSync(providerDir);
 
     for (let providerFile of providerFiles) {
 
         const providerPath = providerDir + "/" + providerFile;
-        const parsedPath = path.parse(providerPath);
-
-        result[parsedPath.name] = require(providerPath);
+        const provider = require(providerPath);
+        providers[provider.name] = provider;
     }
 
-    return result;
+    return providers;
 }
 
 /**

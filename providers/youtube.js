@@ -3,6 +3,7 @@
 const _ = require("lodash");
 const provider = require("../lib/provider");
 
+const name = "youtube";
 const apiUrl = "http://www.youtube.com/oembed";
 
 const regExp = [
@@ -19,7 +20,7 @@ const transform = function (match) {
     return "https://www.youtube.com/watch?v=" + match[1];
 };
 
-const youtube = provider(apiUrl, regExp, transform);
+const youtube = provider(name, apiUrl, regExp, transform);
 
 youtube.addTest('https://www.youtube.com/embed/iOf7CsxmFCs', "https://www.youtube.com/watch?v=iOf7CsxmFCs");
 youtube.addTest('https://www.youtube.com/watch?v=iOf7CsxmFCs', "https://www.youtube.com/watch?v=iOf7CsxmFCs");

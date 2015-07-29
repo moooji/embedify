@@ -33,13 +33,16 @@ _.forOwn(embedify.providers, function(provider, providerName) {
                         return expect(provider.match(test.matchUrl))
                             .to.eventually.be.fulfilled
                             .then(function (result) {
-                                return expect(result).to.equal(test.embedUrl);
+                                return expect(result.embedUrl).to.equal(test.embedUrl);
                             });
                     }
                     else {
 
                         return expect(provider.match(test.matchUrl))
-                            .to.be.rejectedWith(UrlMatchError);
+                            .to.eventually.be.fulfilled
+                            .then(function (result) {
+                                return expect(result).to.be.null;
+                            });
                     }
                 });
             }

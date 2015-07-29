@@ -1,6 +1,6 @@
 {
   "name": "embedify",
-  "version": "0.10.13",
+  "version": "0.10.14",
   "description": "oEmbed provider",
   "main": "main.js",
   "scripts": {

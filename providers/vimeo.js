@@ -2,6 +2,7 @@
 
 const provider = require("../lib/provider");
 
+const name = "vimeo";
 const apiUrl = "https://vimeo.com/api/oembed.json";
 
 const regExp = [
@@ -13,7 +14,7 @@ const transform = function (match) {
     return "https://www.vimeo.com/" + match[1];
 };
 
-const vimeo = provider(apiUrl, regExp, transform);
+const vimeo = provider(name, apiUrl, regExp, transform);
 
 vimeo.addTest('https://player.vimeo.com/video/132252780', 'https://www.vimeo.com/132252780');
 vimeo.addTest('https://www.vimeo.com/video/132252780', 'https://www.vimeo.com/132252780');

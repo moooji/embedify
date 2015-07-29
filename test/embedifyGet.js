@@ -27,6 +27,7 @@ describe('Embedify Get', function() {
     it('should return result if matchUrls is valid array', function () {
 
         const matchUrls = [
+            "http://www.google.com",
             "https://www.youtube.com/embed/iOf7CsxmFCs",
             "https://www.youtube.com/watch?v=nfWlot6h_JM"
         ];

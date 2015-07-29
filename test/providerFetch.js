@@ -30,16 +30,14 @@ _.forOwn(embedify.providers, function(provider, providerName) {
 
                     if(_.isString(test.embedUrl)) {
 
-                        return expect(provider.match(test.matchUrl).then(provider.fetch))
+                        return expect(provider.match(test.matchUrl)
+                            .then(function(match) {
+                                return provider.fetch(match.embedUrl);
+                            }))
                             .to.eventually.be.fulfilled
                             .then(function (result) {
                                 return expect(result.type).to.be.string;
                             });
-                    }
-                    else {
-
-                        return expect(provider.match(test.matchUrl).then(provider.fetch))
-                            .to.be.rejectedWith(UrlMatchError);
                     }
                 });
             }
