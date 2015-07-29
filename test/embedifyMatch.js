@@ -52,6 +52,26 @@ describe('Embedify Match', function() {
                 return expect(result).to.deep.equal(expectedResult);
             });
     });
+
+    it('should return one result for duplicate matchUrls', function () {
+
+        const matchUrls = [
+            "https://www.youtube.com/embed/iOf7CsxmFCs",
+            "https://www.youtube.com/embed/iOf7CsxmFCs"
+        ];
+
+        const expectedResult = [
+            {
+                providerName: "youtube",
+                embedUrl: "https://www.youtube.com/watch?v=iOf7CsxmFCs"
+            }];
+
+        return expect(embedify.match(matchUrls))
+            .to.eventually.be.fulfilled
+            .then(function(result) {
+                return expect(result).to.deep.equal(expectedResult);
+            });
+    });
 });
 
 describe('Embedify Match Errors', function() {

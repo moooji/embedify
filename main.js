@@ -23,16 +23,29 @@ function get(matchUrls, callback) {
         .then(match)
         .then(function(matches) {
 
-            return _.map(matches, function(match) {
-                return providers[match.providerName].fetch(match.embedUrl);
-            });
+            const uniqueMatches = [];
+            const promiseCollection = [];
+
+            for (let match of matches) {
+
+                if (!_.where(uniqueMatches, match).length) {
+
+                    const provider = providers[match.providerName];
+                    const fetchPromise = provider.fetch(match.embedUrl);
+
+                    uniqueMatches.push(match);
+                    promiseCollection.push(fetchPromise);
+                }
+            }
+
+            return promiseCollection;
         })
         .all()
         .nodeify(callback);
 }
 
 /**
- * Return matching provider and transformed embed URL
+ * Return matching providers and transformed embed URLs
  * @param {String|Array} matchUrls
  * @param {Function} [callback]
  * @returns {Promise}
@@ -51,6 +64,11 @@ function match(matchUrls, callback) {
         .nodeify(callback);
 }
 
+/**
+ * Return matching provider and transformed embed URL
+ * @param {String} matchUrl
+ * @returns {Promise}
+ */
 function matchOne(matchUrl) {
 
     return Promise.resolve(matchUrl)
@@ -114,7 +132,7 @@ function sanitizeMatchUrls(matchUrls) {
         }
     }
 
-    return matchUrls;
+    return _.uniq(matchUrls);
 }
 
 /**

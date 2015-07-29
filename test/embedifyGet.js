@@ -69,6 +69,37 @@ describe('Embedify Get', function() {
                 return expect(result).to.deep.equal(expectedResult);
             });
     });
+
+    it('should return one result for duplicate embedUrls', function () {
+
+        const matchUrls = [
+            "https://www.youtube.com/embed/iOf7CsxmFCs",
+            "https://www.youtube.com/watch?v=iOf7CsxmFCs"
+        ];
+
+        const expectedResult = [
+            {
+                type: 'video',
+                thumbnail_height: 360,
+                thumbnail_url: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
+                provider_url: 'https://www.youtube.com/',
+                provider_name: 'YouTube',
+                width: 480,
+                thumbnail_width: 480,
+                title: '☼ Min sommer road trip | Del 1 ☼',
+                author_url: 'https://www.youtube.com/user/AmandaS4G',
+                version: '1.0',
+                author_name: 'Amanda MIDK',
+                height: 270,
+                html: '<iframe width="480" height="270" src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" frameborder="0" allowfullscreen></iframe>'
+            }];
+
+        return expect(embedify.get(matchUrls))
+            .to.eventually.be.fulfilled
+            .then(function(result) {
+                return expect(result).to.deep.equal(expectedResult);
+            });
+    });
 });
 
 describe('Embedify Get Errors', function() {
