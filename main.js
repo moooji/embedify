@@ -21,28 +21,10 @@ const providers = requireProviders();
 function get(embedUrl, callback) {
 
     return Promise.resolve(embedUrl)
-        .then(function (embedUrl) {
-
-            // Parse url to ensure that it is absolute and valid http(s),
-            // otherwise throw InvalidArgumentError.
-            //
-            // Using 'url-extended' package:
-            // url.parse(urlString, validateAbsolute, validateHttp)
-            const parsedUrl = url.parse(embedUrl, true, true);
-            return parsedUrl.href;
+        .then(match)
+        .then(function(res) {
+            return providers[res.providerName].fetch(res.embedUrl);
         })
-        .catch(url.InvalidArgumentError, function (err) {
-
-            // Wrap and rethrow
-            throw new InvalidArgumentError(err);
-        })
-        .then(function(embedUrl) {
-
-            return _.map(_.keys(providers), function(providerName) {
-               return providers[providerName].get(embedUrl);
-            });
-        })
-        .any()
         .nodeify(callback);
 }
 
@@ -67,14 +49,18 @@ function match(embedUrl, callback) {
         .then(function(embedUrl) {
 
             return _.map(_.keys(providers), function(providerName) {
-                return providers[providerName].match(embedUrl);
+
+                return providers[providerName].match(embedUrl)
+                    .then(function(embedUrl) {
+
+                        return {
+                            providerName: providerName,
+                            embedUrl: embedUrl
+                        }
+                    })
             });
         })
         .any()
-        .then(function(res){
-            console.log(res);
-            return res;
-        })
         .nodeify(callback);
 }
 

@@ -28,9 +28,9 @@ _.forOwn(embedify.providers, function(provider, providerName) {
 
                 it('should pass test ' + numTest, function () {
 
-                    if(test.isMatch) {
+                    if(_.isString(test.embedUrl)) {
 
-                        return expect(provider.get(test.embedUrl))
+                        return expect(provider.match(test.matchUrl).then(provider.fetch))
                             .to.eventually.be.fulfilled
                             .then(function (result) {
                                 return expect(result.type).to.be.string;
@@ -38,7 +38,7 @@ _.forOwn(embedify.providers, function(provider, providerName) {
                     }
                     else {
 
-                        return expect(provider.get(test.embedUrl))
+                        return expect(provider.match(test.matchUrl).then(provider.fetch))
                             .to.be.rejectedWith(UrlMatchError);
                     }
                 });

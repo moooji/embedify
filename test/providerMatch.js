@@ -28,17 +28,17 @@ _.forOwn(embedify.providers, function(provider, providerName) {
 
                 it('should pass test ' + numTest, function () {
 
-                    if(test.isMatch) {
+                    if(_.isString(test.embedUrl)) {
 
-                        return expect(provider.match(test.embedUrl))
+                        return expect(provider.match(test.matchUrl))
                             .to.eventually.be.fulfilled
                             .then(function (result) {
-                                return expect(result[0]).to.equal(test.embedUrl);
+                                return expect(result).to.equal(test.embedUrl);
                             });
                     }
                     else {
 
-                        return expect(provider.get(test.embedUrl))
+                        return expect(provider.match(test.matchUrl))
                             .to.be.rejectedWith(UrlMatchError);
                     }
                 });

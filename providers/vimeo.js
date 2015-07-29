@@ -15,8 +15,8 @@ const transform = function (match) {
 
 const vimeo = provider(apiUrl, regExp, transform);
 
-vimeo.addTest('https://player.vimeo.com/video/132252780', true);
-vimeo.addTest('https://www.vimeo.com/video/132252780', true);
-vimeo.addTest('https://youtu.be/iOf7CsxmFCs', false);
+vimeo.addTest('https://player.vimeo.com/video/132252780', 'https://www.vimeo.com/132252780');
+vimeo.addTest('https://www.vimeo.com/video/132252780', 'https://www.vimeo.com/132252780');
+vimeo.addTest('https://youtu.be/iOf7CsxmFCs', null);
 
 module.exports = vimeo;

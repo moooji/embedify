@@ -21,9 +21,9 @@ const transform = function (match) {
 
 const youtube = provider(apiUrl, regExp, transform);
 
-youtube.addTest('https://www.youtube.com/embed/iOf7CsxmFCs', true);
-youtube.addTest('https://www.youtube.com/watch?v=iOf7CsxmFCs', true);
-youtube.addTest('https://youtu.be/iOf7CsxmFCs', true);
-youtube.addTest('https://player.vimeo.com/video/132252780', false);
+youtube.addTest('https://www.youtube.com/embed/iOf7CsxmFCs', "https://www.youtube.com/watch?v=iOf7CsxmFCs");
+youtube.addTest('https://www.youtube.com/watch?v=iOf7CsxmFCs', "https://www.youtube.com/watch?v=iOf7CsxmFCs");
+youtube.addTest('https://youtu.be/iOf7CsxmFCs', "https://www.youtube.com/watch?v=iOf7CsxmFCs");
+youtube.addTest('https://player.vimeo.com/video/132252780', null);
 
 module.exports = youtube;
