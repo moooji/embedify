@@ -52,7 +52,7 @@ function get(embedUrl, callback) {
 function requireProviders() {
 
     let result = [];
-    const providerDir = "./providers";
+    const providerDir = __dirname + "/providers";
     const providerFiles = fs.readdirSync(providerDir);
 
     for (let providerFile of providerFiles) {
