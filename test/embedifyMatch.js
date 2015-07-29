@@ -16,9 +16,17 @@ describe('Embedify Match', function() {
 
     it('should return result if embedUrl is valid string', function () {
 
-        const embedUrl = "https://www.youtube.com/embed/iOf7CsxmFCs";
-        return expect(embedify.match(embedUrl))
-            .to.eventually.be.fulfilled;
+        const matchUrl = "https://www.youtube.com/embed/iOf7CsxmFCs";
+        const expectedResult = {
+            providerName: "youtube",
+            embedUrl: "https://www.youtube.com/watch?v=iOf7CsxmFCs"
+        };
+
+        return expect(embedify.match(matchUrl))
+            .to.eventually.be.fulfilled
+            .then(function(result){
+                return expect(result).to.deep.equal(expectedResult);
+            });
     });
 });
 

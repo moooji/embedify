@@ -28,17 +28,24 @@ function get(embedUrl, callback) {
         .nodeify(callback);
 }
 
-function match(embedUrl, callback) {
 
-    return Promise.resolve(embedUrl)
-        .then(function (embedUrl) {
+/**
+ * Return matching provider and transformed embed URL
+ * @param {String} matchUrl
+ * @param {Function} [callback]
+ * @returns {Promise}
+ */
+function match(matchUrl, callback) {
+
+    return Promise.resolve(matchUrl)
+        .then(function (matchUrl) {
 
             // Parse url to ensure that it is absolute and valid http(s),
             // otherwise throw InvalidArgumentError.
             //
             // Using 'url-extended' package:
             // url.parse(urlString, validateAbsolute, validateHttp)
-            const parsedUrl = url.parse(embedUrl, true, true);
+            const parsedUrl = url.parse(matchUrl, true, true);
             return parsedUrl.href;
         })
         .catch(url.InvalidArgumentError, function (err) {
@@ -46,11 +53,11 @@ function match(embedUrl, callback) {
             // Wrap and rethrow
             throw new InvalidArgumentError(err);
         })
-        .then(function(embedUrl) {
+        .then(function(matchUrl) {
 
             return _.map(_.keys(providers), function(providerName) {
 
-                return providers[providerName].match(embedUrl)
+                return providers[providerName].match(matchUrl)
                     .then(function(embedUrl) {
 
                         return {
