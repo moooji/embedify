@@ -76,33 +76,33 @@ describe('Embedify Match', function() {
 
 describe('Embedify Match Errors', function() {
 
-    it('should return InvalidArgumentError if embedUrl is null', function () {
+    it('should return InvalidArgumentError if matchUrls is null', function () {
 
-        const embedUrl = null;
-        return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
+        const matchUrls = null;
+        return expect(embedify.match(matchUrls)).to.be.rejectedWith(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if embedUrl is undefined', function () {
 
-        const embedUrl = undefined;
-        return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
+        const matchUrls = undefined;
+        return expect(embedify.match(matchUrls)).to.be.rejectedWith(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if embedUrl is number', function () {
 
-        const embedUrl = 123;
-        return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
+        const matchUrls = 123;
+        return expect(embedify.match(matchUrls)).to.be.rejectedWith(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if embedUrl is object', function () {
 
-        const embedUrl = {};
-        return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
+        const matchUrls = {};
+        return expect(embedify.match(matchUrls)).to.be.rejectedWith(InvalidArgumentError);
     });
 
     it('should return InvalidArgumentError if embedUrl is non-string array', function () {
 
-        const embedUrl = [123, {}];
-        return expect(embedify.match(embedUrl)).to.be.rejectedWith(InvalidArgumentError);
+        const matchUrls = [123, {}];
+        return expect(embedify.match(matchUrls)).to.be.rejectedWith(InvalidArgumentError);
     });
 });
