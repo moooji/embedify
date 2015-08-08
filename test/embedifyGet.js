@@ -20,7 +20,7 @@ describe('Embedify Get', function() {
         return expect(embedify.get(matchUrls))
             .to.eventually.be.fulfilled
             .then(function (result) {
-                return expect(result[0].type).to.equal("video");
+                return expect(result.type).to.equal("video");
             });
     });
 
@@ -79,22 +79,21 @@ describe('Embedify Get', function() {
             "https://www.youtube.com/watch?v=iOf7CsxmFCs"
         ];
 
-        const expectedResult = [
-            {
-                type: 'video',
-                thumbnail_height: 360,
-                thumbnail_url: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
-                provider_url: 'https://www.youtube.com/',
-                provider_name: 'YouTube',
-                width: 480,
-                thumbnail_width: 480,
-                title: '☼ Min sommer road trip | Del 1 ☼',
-                author_url: 'https://www.youtube.com/user/AmandaS4G',
-                version: '1.0',
-                author_name: 'Amanda MIDK',
-                height: 270,
-                html: '<iframe width="480" height="270" src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" frameborder="0" allowfullscreen></iframe>'
-            }];
+        const expectedResult = {
+            type: 'video',
+            thumbnail_height: 360,
+            thumbnail_url: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
+            provider_url: 'https://www.youtube.com/',
+            provider_name: 'YouTube',
+            width: 480,
+            thumbnail_width: 480,
+            title: '☼ Min sommer road trip | Del 1 ☼',
+            author_url: 'https://www.youtube.com/user/AmandaS4G',
+            version: '1.0',
+            author_name: 'Amanda MIDK',
+            height: 270,
+            html: '<iframe width="480" height="270" src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" frameborder="0" allowfullscreen></iframe>'
+        };
 
         return expect(embedify.get(matchUrls))
             .to.eventually.be.fulfilled

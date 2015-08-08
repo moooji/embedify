@@ -29,6 +29,14 @@ function get(matchUrls, callback) {
             });
         })
         .all()
+        .then(function(res) {
+
+            if (res.length === 1) {
+                return res[0];
+            }
+
+            return res;
+        })
         .nodeify(callback);
 }
 
