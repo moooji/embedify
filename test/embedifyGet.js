@@ -24,6 +24,16 @@ describe('Embedify Get', function() {
             });
     });
 
+    it('should return null for unknown providers', function () {
+
+        const matchUrls = "https://www.unknown.com/embed/iOf7CsxmFCs";
+        return expect(embedify.get(matchUrls))
+            .to.eventually.be.fulfilled
+            .then(function (result) {
+                return expect(result).to.equal.null;
+            });
+    });
+
     it('should return result if matchUrls is valid array', function () {
 
         const matchUrls = [

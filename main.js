@@ -31,6 +31,12 @@ function get(matchUrls, callback) {
         .all()
         .then(function(res) {
 
+            // Return null if there is no item
+            if (res.length === 0) {
+                return null;
+            }
+
+            // Return string if there is only one item
             if (res.length === 1) {
                 return res[0];
             }
