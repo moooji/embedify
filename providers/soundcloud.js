@@ -14,7 +14,6 @@ const transform = function (match) {
 
     let result = match[1];
     result = result.replace("%3A//", "://");
-    console.log
     return result;
 };
 
