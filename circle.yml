@@ -1,3 +1,8 @@
 machine:
   node:
     version: 4.0.0
+deployment:
+  npm:
+    branch: master
+    commands:
+      - npm publish

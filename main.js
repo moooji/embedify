@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const _ = require("lodash");
-const Promise = require("bluebird");
+const fs = require('fs');
+const _ = require('lodash');
+const Bluebird = require('bluebird');
 
-const InvalidArgumentError = require("./lib/errors").InvalidArgumentError;
-const ApiRequestError = require("./lib/errors").ApiRequestError;
-const UrlMatchError = require("./lib/errors").UrlMatchError;
+const InvalidArgumentError = require('./lib/errors').InvalidArgumentError;
+const ApiRequestError = require('./lib/errors').ApiRequestError;
+const UrlMatchError = require('./lib/errors').UrlMatchError;
 
 const providers = requireProviders();
 
@@ -14,36 +14,37 @@ const providers = requireProviders();
  * Gets the oEmbed information for a URL
  * @param {String|Array} matchUrls
  * @param {Function} [callback]
- * @returns {Promise|Function}
+ * @returns {Promise}
  */
+
 function get(matchUrls, callback) {
 
-    return Promise.resolve(matchUrls)
-        .then(match)
-        .then(function(matches) {
+  return Bluebird.resolve(matchUrls)
+    .then(match)
+    .then((matches) => {
 
-            return _.map(matches, function(match) {
+      return _.map(matches, function(match) {
 
-                const provider = providers[match.providerName];
-                return provider.fetch(match.embedUrl);
-            });
-        })
-        .all()
-        .then(function(res) {
+        const provider = providers[match.providerName];
+        return provider.fetch(match.embedUrl);
+      });
+    })
+    .all()
+    .then((res) => {
 
-            // Return null if there is no item
-            if (res.length === 0) {
-                return null;
-            }
+      // Return null if there is no item
+      if (res.length === 0) {
+        return null;
+      }
 
-            // Return string if there is only one item
-            if (res.length === 1) {
-                return res[0];
-            }
+      // Return string if there is only one item
+      if (res.length === 1) {
+        return res[0];
+      }
 
-            return res;
-        })
-        .nodeify(callback);
+      return res;
+    })
+    .nodeify(callback);
 }
 
 /**
@@ -52,20 +53,21 @@ function get(matchUrls, callback) {
  * @param {Function} [callback]
  * @returns {Promise}
  */
+
 function match(matchUrls, callback) {
 
-    return Promise.resolve(matchUrls)
-        .then(sanitizeMatchUrls)
-        .then(function(matchUrls) {
+  return Bluebird.resolve(matchUrls)
+    .then(sanitizeMatchUrls)
+    .then((matchUrls) => {
 
-            return _.map(matchUrls, function(matchUrl) {
-                return matchOne(matchUrl);
-            });
-        })
-        .all()
-        .then(mergeMatchResults)
-        .then(sanitizeMatchResults)
-        .nodeify(callback);
+      return _.map(matchUrls, function(matchUrl) {
+        return matchOne(matchUrl);
+      });
+    })
+    .all()
+    .then(mergeMatchResults)
+    .then(sanitizeMatchResults)
+    .nodeify(callback);
 }
 
 /**
@@ -73,16 +75,17 @@ function match(matchUrls, callback) {
  * @param {String} matchUrl
  * @returns {Promise}
  */
+
 function matchOne(matchUrl) {
 
-    return Promise.resolve(matchUrl)
-        .then(function(matchUrl) {
+  return Bluebird.resolve(matchUrl)
+    .then((matchUrl) => {
 
-            return _.map(_.keys(providers), function(providerName) {
-                return providers[providerName].match(matchUrl);
-            });
-        })
-        .all()
+      return _.map(_.keys(providers), (providerName) => {
+        return providers[providerName].match(matchUrl);
+      });
+    })
+    .all();
 }
 
 /**
@@ -90,18 +93,19 @@ function matchOne(matchUrl) {
  * @param {Array} matchResults
  * @returns {Array}
  */
+
 function mergeMatchResults(matchResults) {
 
-    let result = [];
+  let result = [];
 
-    for (let item of matchResults) {
+  matchResults.forEach((item) => {
 
-        if (_.isArray(item)) {
-            result = _.union(result, item);
-        }
+    if (_.isArray(item)) {
+      result = _.union(result, item);
     }
+  });
 
-    return result;
+  return result;
 }
 
 /**
@@ -109,40 +113,41 @@ function mergeMatchResults(matchResults) {
  * @param {Array} matchResults
  * @returns {Array}
  */
+
 function sanitizeMatchResults(matchResults) {
 
-    const result = [];
+  const result = [];
 
-    for (let matchResult of matchResults) {
+  matchResults.forEach((matchResult) => {
 
-        if (matchResult !== null &&
-            matchResult !== undefined &&
-            _.where(result, matchResult).length === 0) {
-            result.push(matchResult);
-        }
+    if (matchResult !== null &&
+      matchResult !== undefined &&
+      _.where(result, matchResult).length === 0) {
+      result.push(matchResult);
     }
+  });
 
-    return result;
+  return result;
 }
 
 /**
  * Requires all providers
  * @returns {Object}
  */
+
 function requireProviders() {
 
-    const providers = {};
-    const providerDir = __dirname + "/providers";
-    const providerFiles = fs.readdirSync(providerDir);
+  const providers = {};
+  const providerDir = __dirname + '/providers';
+  const providerFiles = fs.readdirSync(providerDir);
 
-    for (let providerFile of providerFiles) {
+  providerFiles.forEach((providerFile) => {
+    const providerPath = providerDir + '/' + providerFile;
+    const provider = require(providerPath);
+    providers[provider.name] = provider;
+  });
 
-        const providerPath = providerDir + "/" + providerFile;
-        const provider = require(providerPath);
-        providers[provider.name] = provider;
-    }
-
-    return providers;
+  return providers;
 }
 
 /**
@@ -150,32 +155,34 @@ function requireProviders() {
  * @param {String|Array} matchUrls
  * @returns {Array}
  */
+
 function sanitizeMatchUrls(matchUrls) {
 
-    if (_.isString(matchUrls)) {
-        matchUrls = [matchUrls];
+  if (_.isString(matchUrls)) {
+    matchUrls = [matchUrls];
+  }
+
+  if (!_.isArray(matchUrls)) {
+    throw new InvalidArgumentError('Invalid match URLs - should be string or array');
+  }
+
+  for (let matchUrl of matchUrls) {
+
+    if (!_.isString(matchUrl)) {
+      throw new InvalidArgumentError('Invalid match URL - should be string');
     }
+  }
 
-    if (!_.isArray(matchUrls)) {
-        throw new InvalidArgumentError("Invalid match URLs - should be string or array");
-    }
-
-    for (let matchUrl of matchUrls) {
-
-        if (!_.isString(matchUrl)) {
-            throw new InvalidArgumentError("Invalid match URL - should be string");
-        }
-    }
-
-    return _.uniq(matchUrls);
+  return _.uniq(matchUrls);
 }
 
 /**
  * Getter for providers
  * @returns {Object}
  */
+
 function getProviders() {
-    return providers;
+  return providers;
 }
 
 // Public

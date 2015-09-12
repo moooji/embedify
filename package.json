@@ -1,6 +1,6 @@
 {
   "name": "embedify",
-  "version": "0.10.27",
+  "version": "0.10.28",
   "description": "oEmbed provider",
   "main": "main.js",
   "scripts": {
@@ -25,14 +25,17 @@
     "url": "https://github.com/moooji/embedify/issues"
   },
   "dependencies": {
-    "bluebird": "^2.9.33",
+    "bluebird": "^2.10.0",
     "custom-error-generator": "^7.0.0",
-    "lodash": "^3.9.3",
-    "request": "^2.60.0"
+    "lodash": "^3.10.1",
+    "request": "^2.61.0"
   },
   "devDependencies": {
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
-    "mocha": "^2.2.5"
+    "jscs": "^2.1.1",
+    "mocha": "^2.2.5",
+    "mocha-jscs": "^2.0.0",
+    "mocha-jshint": "^2.2.3"
   }
 }
