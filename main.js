@@ -23,26 +23,36 @@ function get(matchUrls, callback) {
     .then(match)
     .then((matches) => {
 
-      return _.map(matches, function(match) {
+      return matches.map((match) => {
 
         const provider = providers[match.providerName];
         return provider.fetch(match.embedUrl);
       });
     })
-    .all()
-    .then((res) => {
+    .settle()
+    .then((results) => {
 
-      // Return null if there is no item
-      if (res.length === 0) {
-        return null;
-      }
+      // results is a PromiseInspection array
+      // this is reached once the operations are all done, regardless if
+      // they're successful or not.
 
-      // Return string if there is only one item
-      if (res.length === 1) {
-        return res[0];
-      }
+      const oEmbeds = [];
 
-      return res;
+      results.forEach((result) => {
+
+        if (result.isFulfilled()) {
+
+          // Return the oEmbed information
+          oEmbeds.push(result.value());
+
+        } else if (result.isRejected()) {
+
+          // TODO: Do something with 404s etc.
+          //result.reason()
+        }
+      });
+
+      return oEmbeds;
     })
     .nodeify(callback);
 }
