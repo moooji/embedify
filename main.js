@@ -12,6 +12,7 @@ const providers = requireProviders();
 
 /**
  * Gets the oEmbed information for a URL
+ *
  * @param {String|Array} matchUrls
  * @param {Function} [callback]
  * @returns {Promise}
@@ -59,6 +60,7 @@ function get(matchUrls, callback) {
 
 /**
  * Return matching providers and transformed embed URLs
+ *
  * @param {String|Array} matchUrls
  * @param {Function} [callback]
  * @returns {Promise}
@@ -82,6 +84,7 @@ function match(matchUrls, callback) {
 
 /**
  * Return matching provider and transformed embed URL
+ *
  * @param {String} matchUrl
  * @returns {Promise}
  */
@@ -100,6 +103,7 @@ function matchOne(matchUrl) {
 
 /**
  * Merges match results from different URLs
+ *
  * @param {Array} matchResults
  * @returns {Array}
  */
@@ -120,6 +124,7 @@ function mergeMatchResults(matchResults) {
 
 /**
  * Ensures that match results are unique and valid
+ *
  * @param {Array} matchResults
  * @returns {Array}
  */
@@ -142,6 +147,7 @@ function sanitizeMatchResults(matchResults) {
 
 /**
  * Requires all providers
+ *
  * @returns {Object}
  */
 
@@ -162,6 +168,7 @@ function requireProviders() {
 
 /**
  * Ensures that matchUrls is array of URLs
+ *
  * @param {String|Array} matchUrls
  * @returns {Array}
  */
@@ -188,6 +195,7 @@ function sanitizeMatchUrls(matchUrls) {
 
 /**
  * Getter for providers
+ *
  * @returns {Object}
  */
 
