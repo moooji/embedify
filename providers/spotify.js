@@ -9,12 +9,12 @@ const regExp = [
   /https?:\/\/open\.spotify\.com\/(.*)\/(.*)/i,
   /https?:\/\/play\.spotify\.com\/(.*)\/(.*)/i,
   /https?:\/\/embed\.spotify\.com\/\?uri=spotify:(.*):(.*)/i,
-  /https?:\/\/embed\.spotify\.com\/\?uri=spotify%3A(.*)%3A(.*)/i
+  /https?:\/\/embed\.spotify\.com\/\?uri=spotify%3A(.*)%3A(.*)/i,
 ];
 
-const transform = function(match) {
-  return 'https://open.spotify.com/' + match[1] + '/' + match[2];
-};
+function transform(match) {
+  return `https://open.spotify.com/${match[1]}/${match[2]}`;
+}
 
 const spotify = provider(pluginName, apiUrl, regExp, transform);
 

@@ -4,7 +4,6 @@ const fs = require('fs');
 const _ = require('lodash');
 const Bluebird = require('bluebird');
 
-const InvalidArgumentError = require('./lib/errors').InvalidArgumentError;
 const ApiRequestError = require('./lib/errors').ApiRequestError;
 const UrlMatchError = require('./lib/errors').UrlMatchError;
 
@@ -19,35 +18,28 @@ const providers = requireProviders();
  */
 
 function get(matchUrls, callback) {
-
   return Bluebird.resolve(matchUrls)
     .then(match)
-    .then((matches) => {
-
-      return matches.map((match) => {
-
+    .then(matches => {
+      return matches.map(match => {
         const provider = providers[match.providerName];
         return provider.fetch(match.embedUrl);
       });
     })
     .settle()
-    .then((results) => {
-
+    .then(results => {
       // results is a PromiseInspection array
       // this is reached once the operations are all done, regardless if
       // they're successful or not.
 
       const oEmbeds = [];
 
-      results.forEach((result) => {
-
+      results.forEach(result => {
         if (result.isFulfilled()) {
-
           // Return the oEmbed information
           oEmbeds.push(result.value());
 
         } else if (result.isRejected()) {
-
           // TODO: Do something with 404s etc.
           //result.reason()
         }
@@ -67,15 +59,9 @@ function get(matchUrls, callback) {
  */
 
 function match(matchUrls, callback) {
-
   return Bluebird.resolve(matchUrls)
     .then(sanitizeMatchUrls)
-    .then((matchUrls) => {
-
-      return _.map(matchUrls, function(matchUrl) {
-        return matchOne(matchUrl);
-      });
-    })
+    .then(matchUrls => matchUrls.map(matchUrl => matchOne(matchUrl)))
     .all()
     .then(mergeMatchResults)
     .then(sanitizeMatchResults)
@@ -90,11 +76,9 @@ function match(matchUrls, callback) {
  */
 
 function matchOne(matchUrl) {
-
   return Bluebird.resolve(matchUrl)
-    .then((matchUrl) => {
-
-      return _.map(_.keys(providers), (providerName) => {
+    .then(matchUrl => {
+      return _.map(_.keys(providers), providerName => {
         return providers[providerName].match(matchUrl);
       });
     })
@@ -109,11 +93,9 @@ function matchOne(matchUrl) {
  */
 
 function mergeMatchResults(matchResults) {
-
   let result = [];
 
-  matchResults.forEach((item) => {
-
+  matchResults.forEach(item => {
     if (_.isArray(item)) {
       result = _.union(result, item);
     }
@@ -130,11 +112,9 @@ function mergeMatchResults(matchResults) {
  */
 
 function sanitizeMatchResults(matchResults) {
-
   const result = [];
 
-  matchResults.forEach((matchResult) => {
-
+  matchResults.forEach(matchResult => {
     if (matchResult !== null &&
       matchResult !== undefined &&
       _.where(result, matchResult).length === 0) {
@@ -152,7 +132,6 @@ function sanitizeMatchResults(matchResults) {
  */
 
 function requireProviders() {
-
   const providers = {};
   const providerDir = __dirname + '/providers';
   const providerFiles = fs.readdirSync(providerDir);
@@ -174,19 +153,17 @@ function requireProviders() {
  */
 
 function sanitizeMatchUrls(matchUrls) {
-
   if (_.isString(matchUrls)) {
     matchUrls = [matchUrls];
   }
 
   if (!_.isArray(matchUrls)) {
-    throw new InvalidArgumentError('Invalid match URLs - should be string or array');
+    throw new TypeError('Invalid match URLs - should be string or array');
   }
 
   for (let matchUrl of matchUrls) {
-
     if (!_.isString(matchUrl)) {
-      throw new InvalidArgumentError('Invalid match URL - should be string');
+      throw new TypeError('Invalid match URL - should be string');
     }
   }
 
@@ -207,6 +184,5 @@ function getProviders() {
 module.exports.get = get;
 module.exports.match = match;
 module.exports.providers = getProviders();
-module.exports.InvalidArgumentError = InvalidArgumentError;
 module.exports.ApiRequestError = ApiRequestError;
 module.exports.UrlMatchError = UrlMatchError;

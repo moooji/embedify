@@ -1,0 +1,23 @@
+{
+  "plugins": [
+    "react"
+  ],
+  "extends": "airbnb",
+  "ecmaFeatures": {
+    "jsx": true,
+    "modules": true
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    "strict": [0, "global"],
+    "padded-blocks": [2, "never"],
+    "arrow-body-style": [0, "as-needed"],
+    "no-use-before-define": [2, "nofunc"],
+    "react/prefer-es6-class": [2, "never"]
+  }
+}

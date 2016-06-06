@@ -7,15 +7,13 @@ const apiUrl = 'http://soundcloud.com/oembed';
 
 const regExp = [
   /(https?:\/\/(soundcloud.com|snd.sc)\/(.*))/i,
-  /https?:\/\/.+\.soundcloud\.com\/player\/\?url=(https?%3A\/\/.+\.soundcloud\.com\/tracks\/.+?)&/i
+  /https?:\/\/.+\.soundcloud\.com\/player\/\?url=(https?%3A\/\/.+\.soundcloud\.com\/tracks\/.+?)&/i,
 ];
 
-const transform = function(match) {
-
-  let result = match[1];
-  result = result.replace('%3A//', '://');
-  return result;
-};
+function transform(match) {
+  const result = match[1];
+  return result.replace('%3A//', '://');
+}
 
 const soundcloud = provider(pluginName, apiUrl, regExp, transform);
 

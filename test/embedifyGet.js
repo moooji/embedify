@@ -2,40 +2,34 @@
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const embedify = require('../main');
+const embedify = require('../index');
 
 const InvalidArgumentError = embedify.InvalidArgumentError;
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-describe('Embedify Get', function() {
-
+describe('Embedify Get', () => {
   it('should return result if matchUrls is valid string', () => {
-
     const matchUrls = 'https://www.youtube.com/embed/iOf7CsxmFCs';
+
     return expect(embedify.get(matchUrls))
       .to.eventually.be.fulfilled
-      .then((result) => {
-        return expect(result[0].type).to.equal('video');
-      });
+      .then(result => expect(result[0].type).to.equal('video'));
   });
 
   it('should return null for unknown providers', () => {
-
     const matchUrls = 'https://www.unknown.com/embed/iOf7CsxmFCs';
+
     return expect(embedify.get(matchUrls))
       .to.eventually.be.fulfilled
-      .then(function(result) {
-        return expect(result).to.equal.null;
-      });
+      .then(result => expect(result).to.equal.null);
   });
 
   it('should return result if matchUrls is valid array', () => {
-
     const matchUrls = [
       'http://www.google.com',
       'https://www.youtube.com/embed/iOf7CsxmFCs',
-      'https://www.youtube.com/watch?v=nfWlot6h_JM'
+      'https://www.youtube.com/watch?v=nfWlot6h_JM',
     ];
 
     const expectedResult = [
@@ -71,7 +65,7 @@ describe('Embedify Get', function() {
         title: 'Taylor Swift - Shake It Off',
         type: 'video',
         version: '1.0',
-        width: 480
+        width: 480,
       }];
 
     return expect(embedify.get(matchUrls))
@@ -82,12 +76,11 @@ describe('Embedify Get', function() {
   });
 
   it('should return result if some matchUrls have provider but throw 404', () => {
-
     const matchUrls = [
       'http://www.google.com',
       'https://www.youtube.com/embed/iOf7CsxmFCs',
       'https://www.youtube.com/embed/iOf7CsxmFCsWillThrow404',
-      'https://www.youtube.com/watch?v=nfWlot6h_JM'
+      'https://www.youtube.com/watch?v=nfWlot6h_JM',
     ];
 
     const expectedResult = [
@@ -106,7 +99,7 @@ describe('Embedify Get', function() {
         height: 270,
         html: '<iframe width="480" height="270" ' +
         'src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" ' +
-        'frameborder="0" allowfullscreen></iframe>'
+        'frameborder="0" allowfullscreen></iframe>',
       },
       {
         author_name: 'TaylorSwiftVEVO',
@@ -123,7 +116,7 @@ describe('Embedify Get', function() {
         title: 'Taylor Swift - Shake It Off',
         type: 'video',
         version: '1.0',
-        width: 480
+        width: 480,
       }];
 
     return expect(embedify.get(matchUrls))
@@ -134,11 +127,10 @@ describe('Embedify Get', function() {
   });
 
   it('should return one result for duplicate embedUrls', () => {
-
     const matchUrls = [
       'https://www.youtube.com/embed/iOf7CsxmFCs',
       'https://www.youtube.com/embed/iOf7CsxmFCs',
-      'https://www.youtube.com/watch?v=iOf7CsxmFCs'
+      'https://www.youtube.com/watch?v=iOf7CsxmFCs',
     ];
 
     const expectedResult = [{
@@ -156,7 +148,7 @@ describe('Embedify Get', function() {
       height: 270,
       html: '<iframe width="480" height="270" ' +
       'src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" ' +
-      'frameborder="0" allowfullscreen></iframe>'
+      'frameborder="0" allowfullscreen></iframe>',
     }];
 
     return expect(embedify.get(matchUrls))
@@ -167,37 +159,31 @@ describe('Embedify Get', function() {
   });
 });
 
-describe('Embedify Get Errors', function() {
-
+describe('Embedify Get Errors', () => {
   it('should return InvalidArgumentError if matchUrls is null', () => {
-
     const matchUrls = null;
     return expect(embedify.get(matchUrls))
       .to.be.rejectedWith(InvalidArgumentError);
   });
 
   it('should return InvalidArgumentError if matchUrls is undefined', () => {
-
     return expect(embedify.get())
       .to.be.rejectedWith(InvalidArgumentError);
   });
 
   it('should return InvalidArgumentError if matchUrls is number', () => {
-
     const matchUrls = 123;
     return expect(embedify.get(matchUrls))
       .to.be.rejectedWith(InvalidArgumentError);
   });
 
   it('should return InvalidArgumentError if matchUrls is object', () => {
-
     const matchUrls = {};
     return expect(embedify.get(matchUrls))
       .to.be.rejectedWith(InvalidArgumentError);
   });
 
   it('should return InvalidArgumentError if matchUrls is non-string array', () => {
-
     const matchUrls = [123, {}];
     return expect(embedify.get(matchUrls))
       .to.be.rejectedWith(InvalidArgumentError);

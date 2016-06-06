@@ -12,12 +12,12 @@ const regExp = [
   /https?:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9_-]+)/i,
   /https?:\/\/www\.youtube\.com\/v\/([a-zA-Z0-9_-]+)/i,
   /https?:\/\/www\.youtube\.com\/user\/[a-zA-Z0-9_-]+\?v=([a-zA-Z0-9_-]+)/i,
-  /https?:\/\/www\.youtube-nocookie\.com\/v\/([a-zA-Z0-9_-]+)/i
+  /https?:\/\/www\.youtube-nocookie\.com\/v\/([a-zA-Z0-9_-]+)/i,
 ];
 
-const transform = function(match) {
-  return 'https://www.youtube.com/watch?v=' + match[1];
-};
+function transform(match) {
+  return `https://www.youtube.com/watch?v=${match[1]}`;
+}
 
 const youtube = provider(pluginName, apiUrl, regExp, transform);
 
