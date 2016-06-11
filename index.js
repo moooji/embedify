@@ -1,13 +1,13 @@
 'use strict';
 
-const fs = require('fs');
 const _ = require('lodash');
 const Bluebird = require('bluebird');
 
-const ApiRequestError = require('./lib/errors').ApiRequestError;
-const UrlMatchError = require('./lib/errors').UrlMatchError;
-
-const providers = requireProviders();
+const plugins = new Map();
+plugins.set('soundcloud', require('./plugins/soundcloud'));
+plugins.set('spotify', require('./plugins/spotify'));
+plugins.set('vimeo', require('./plugins/vimeo'));
+plugins.set('youtube', require('./plugins/youtube'));
 
 /**
  * Gets the oEmbed information for a URL
@@ -126,26 +126,6 @@ function sanitizeMatchResults(matchResults) {
 }
 
 /**
- * Requires all providers
- *
- * @returns {Object}
- */
-
-function requireProviders() {
-  const providers = {};
-  const providerDir = __dirname + '/providers';
-  const providerFiles = fs.readdirSync(providerDir);
-
-  providerFiles.forEach((providerFile) => {
-    const providerPath = providerDir + '/' + providerFile;
-    const provider = require(providerPath);
-    providers[provider.name] = provider;
-  });
-
-  return providers;
-}
-
-/**
  * Ensures that matchUrls is array of URLs
  *
  * @param {String|Array} matchUrls
@@ -170,19 +150,7 @@ function sanitizeMatchUrls(matchUrls) {
   return _.uniq(matchUrls);
 }
 
-/**
- * Getter for providers
- *
- * @returns {Object}
- */
-
-function getProviders() {
-  return providers;
-}
-
 // Public
 module.exports.get = get;
 module.exports.match = match;
-module.exports.providers = getProviders();
-module.exports.ApiRequestError = ApiRequestError;
-module.exports.UrlMatchError = UrlMatchError;
+module.exports.plugins = plugins;

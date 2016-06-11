@@ -1,8 +1,5 @@
-'use strict';
-
 const provider = require('../lib/provider');
 
-const pluginName = 'youtube';
 const apiUrl = 'http://www.youtube.com/oembed';
 
 const regExp = [
@@ -19,17 +16,4 @@ function transform(match) {
   return `https://www.youtube.com/watch?v=${match[1]}`;
 }
 
-const youtube = provider(pluginName, apiUrl, regExp, transform);
-
-youtube.addTest('https://www.youtube.com/embed/iOf7CsxmFCs',
-  'https://www.youtube.com/watch?v=iOf7CsxmFCs');
-
-youtube.addTest('https://www.youtube.com/watch?v=iOf7CsxmFCs',
-  'https://www.youtube.com/watch?v=iOf7CsxmFCs');
-
-youtube.addTest('https://youtu.be/iOf7CsxmFCs',
-  'https://www.youtube.com/watch?v=iOf7CsxmFCs');
-
-youtube.addTest('https://player.vimeo.com/video/132252780', null);
-
-module.exports = youtube;
+module.exports = provider.create(apiUrl, regExp, transform);
