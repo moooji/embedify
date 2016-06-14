@@ -9,7 +9,7 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 // Iterate through all providers
-_.forOwn(embedify.providers, (provider, providerName) => {
+embedify.providers.forEach((provider, providerName) => {
   if (provider.tests && provider.tests.length) {
     describe(`Get [${providerName}]`, () => {
       // Iterate through all tests defined for plugin

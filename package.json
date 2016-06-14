@@ -31,7 +31,7 @@
     "custom-error-generator": "^7.0.0",
     "lodash": "^4.13.1",
     "request": "^2.72.0",
-    "valido": "^2.0.3"
+    "valido": "^2.0.7"
   },
   "devDependencies": {
     "chai": "^3.5.0",
