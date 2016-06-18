@@ -1,7 +1,7 @@
 'use strict';
 
-const got = require('got');
 const is = require('valido');
+const axios = require('axios');
 const Promise = require('bluebird');
 const createError = require('custom-error-generator');
 
@@ -32,7 +32,7 @@ function Embedify(options) {
   this.providers = providers;
   this.ContentRequestError = ContentRequestError;
   this.prettify = options && options.prettify === true;
-  this.client = options && options.client ? options.client : got;
+  this.client = options && options.client ? options.client : axios;
   this.concurrency = options && is.natural(options.concurrency) ? options.concurrency : 10;
 }
 
@@ -110,12 +110,12 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
   return Promise.resolve()
     .then(() => {
       const options = {
-        query: { url: matchUrl },
+        params: { url: matchUrl },
         headers: { 'User-Agent': 'Embedify' },
         json: true,
       };
 
-      return this.client(apiUrl, options)
+      return this.client.get(apiUrl, options)
         .then(res => this.format(res))
         .catch(err => {
           throw new this.ContentRequestError(err.message);
@@ -131,7 +131,7 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
  * @returns {Object}
  */
 Embedify.prototype.format = function format(response) {
-  const oEmbed = response.body;
+  const oEmbed = response.data;
 
   if (!this.prettify) {
     return oEmbed;

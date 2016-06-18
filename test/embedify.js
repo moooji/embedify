@@ -44,10 +44,10 @@ function MockClient(body) {
   this.body = body;
 }
 
-MockClient.prototype.fetch = function fetch() {
+MockClient.prototype.get = function fetch() {
   return Promise.resolve()
     .then(() => {
-      return { body: this.body };
+      return { data: this.body };
     });
 };
 
@@ -98,9 +98,7 @@ describe('Embedify - Pretty Format', () => {
   const url = 'https://play.spotify.com/track/4th1RQAelzqgY7wL53UGQt';
 
   it('should return raw oEmbed', () => {
-    const oEmbed = embedify.create({
-      client: client.fetch.bind(client),
-    });
+    const oEmbed = embedify.create({ client });
 
     return expect(oEmbed.get(url))
       .to.be.eventually.fulfilled
@@ -109,8 +107,8 @@ describe('Embedify - Pretty Format', () => {
 
   it('should return pretty oEmbed', () => {
     const oEmbed = embedify.create({
+      client,
       prettify: true,
-      client: client.fetch.bind(client),
     });
 
     return expect(oEmbed.get(url))

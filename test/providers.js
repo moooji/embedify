@@ -13,14 +13,14 @@ function MockClient(apiUrl, matchUrl) {
   this.matchUrl = matchUrl;
 }
 
-MockClient.prototype.fetch = function fetch(apiUrl, options) {
+MockClient.prototype.get = function get(apiUrl, options) {
   return Promise.resolve()
     .then(() => {
-      if (apiUrl !== this.apiUrl || options.query.url !== this.matchUrl) {
+      if (apiUrl !== this.apiUrl || options.params.url !== this.matchUrl) {
         throw new Error();
       }
 
-      return { body: {} };
+      return { data: {} };
     });
 };
 
@@ -28,7 +28,7 @@ describe('Spotify provider', () => {
   const apiUrl = 'https://embed.spotify.com/oembed/';
   const matchUrl = 'https://open.spotify.com/track/4th1RQAelzqgY7wL53UGQt';
   const client = new MockClient(apiUrl, matchUrl);
-  const oEmbed = embedify.create({ client: client.fetch.bind(client) });
+  const oEmbed = embedify.create({ client });
 
   it('should match URL 1', () => {
     const url = 'https://embed.spotify.com/?uri=spotify:track:4th1RQAelzqgY7wL53UGQt';
@@ -78,7 +78,7 @@ describe('Soundcloud provider 1', () => {
   const apiUrl = 'http://soundcloud.com/oembed';
   const matchUrl = 'https://api.soundcloud.com/tracks/217027580';
   const client = new MockClient(apiUrl, matchUrl);
-  const oEmbed = embedify.create({ client: client.fetch.bind(client) });
+  const oEmbed = embedify.create({ client });
 
   it('should match URL 1', () => {
     const url = 'https://w.soundcloud.com/player/?url=' +
@@ -94,7 +94,7 @@ describe('Soundcloud provider 2', () => {
   const apiUrl = 'http://soundcloud.com/oembed';
   const matchUrl = 'https://soundcloud.com/zedsdead/zeds-dead-twin-shadow-lost';
   const client = new MockClient(apiUrl, matchUrl);
-  const oEmbed = embedify.create({ client: client.fetch.bind(client) });
+  const oEmbed = embedify.create({ client });
 
   it('should match URL 1', () => {
     const url = 'https://soundcloud.com/zedsdead/zeds-dead-twin-shadow-lost';
@@ -115,7 +115,7 @@ describe('Vimeo', () => {
   const apiUrl = 'https://vimeo.com/api/oembed.json';
   const matchUrl = 'https://www.vimeo.com/132252780';
   const client = new MockClient(apiUrl, matchUrl);
-  const oEmbed = embedify.create({ client: client.fetch.bind(client) });
+  const oEmbed = embedify.create({ client });
 
   it('should match URL 1', () => {
     const url = 'https://player.vimeo.com/video/132252780';
@@ -136,7 +136,7 @@ describe('Youtube', () => {
   const apiUrl = 'http://www.youtube.com/oembed';
   const matchUrl = 'https://www.youtube.com/watch?v=iOf7CsxmFCs';
   const client = new MockClient(apiUrl, matchUrl);
-  const oEmbed = embedify.create({ client: client.fetch.bind(client) });
+  const oEmbed = embedify.create({ client });
 
   it('should match URL 1', () => {
     const url = 'https://www.youtube.com/embed/iOf7CsxmFCs';
