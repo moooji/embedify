@@ -31,7 +31,7 @@ function create(options) {
 function Embedify(options) {
   this.providers = providers;
   this.ContentRequestError = ContentRequestError;
-  this.prettyFormat = options && options.prettyFormat === true;
+  this.prettify = options && options.prettify === true;
   this.client = options && options.client ? options.client : got;
   this.concurrency = options && is.natural(options.concurrency) ? options.concurrency : 10;
 }
@@ -116,11 +116,42 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
       };
 
       return this.client(apiUrl, options)
-        .then(res => res.body)
+        .then(res => this.format(res))
         .catch(err => {
           throw new this.ContentRequestError(err.message);
         });
     });
+};
+
+/**
+ * Formats the oEmbed response
+ *
+ * @param {Object} response
+ * @param {boolean} shouldBePretty
+ * @returns {Object}
+ */
+Embedify.prototype.format = function format(response) {
+  const oEmbed = response.body;
+
+  if (!this.prettify) {
+    return oEmbed;
+  }
+
+  return {
+    type: oEmbed.type || null,
+    version: oEmbed.version.toString() || null,
+    title: oEmbed.title || null,
+    html: oEmbed.html || null,
+    authorName: oEmbed.author_name || null,
+    authorUrl: oEmbed.author_url || null,
+    providerName: oEmbed.provider_name || null,
+    providerUrl: oEmbed.provider_url || null,
+    thumbnailUrl: oEmbed.thumbnail_url || null,
+    thumbnailWidth: parseInt(oEmbed.thumbnail_width, 10) || null,
+    thumbnailHeight: parseInt(oEmbed.thumbnail_height, 10) || null,
+    width: parseInt(oEmbed.width, 10) || null,
+    height: parseInt(oEmbed.height, 10) || null,
+  };
 };
 
 // Public
