@@ -6,7 +6,7 @@ const regExp = [
 ];
 
 function transform(match) {
-  return match[1].replace('%3A//', '://');
+  return match[1].replace('%3A//', '://').replace('http:', 'https:');
 }
 
 module.exports = { apiUrl, regExp, transform };

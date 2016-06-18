@@ -1,8 +1,9 @@
 'use strict';
 
+const got = require('got');
 const is = require('valido');
 const Promise = require('bluebird');
-const fetch = require('./lib/fetch');
+const createError = require('custom-error-generator');
 
 const soundcloud = require('./providers/soundcloud');
 const spotify = require('./providers/spotify');
@@ -10,68 +11,117 @@ const vimeo = require('./providers/vimeo');
 const youtube = require('./providers/youtube');
 const providers = [soundcloud, spotify, vimeo, youtube];
 
-const concurrency = 10;
+const ContentRequestError = createError('ContentRequestError');
+
+/**
+ * Factory that return Embedify instance
+ *
+ * @param {Object} [options]
+ * @returns {Embedify}
+ */
+function create(options) {
+  return new Embedify(options);
+}
+
+/**
+ * Constructor
+ *
+ * @param {Object} [options]
+ */
+function Embedify(options) {
+  this.providers = providers;
+  this.ContentRequestError = ContentRequestError;
+  this.prettyFormat = options && options.prettyFormat === true;
+  this.client = options && options.client ? options.client : got;
+  this.concurrency = options && is.natural(options.concurrency) ? options.concurrency : 10;
+}
 
 /**
  * Gets the oEmbed information for a URL
  * or list of URLs
  *
  * @param {String|Array} urls
- * @param {Function} [callback]
  * @returns {Promise}
  */
+Embedify.prototype.get = function get(urls) {
+  const concurrency = this.concurrency;
 
-function get(urls, callback) {
-  return Promise.map(ensureUrls(urls), url => tryResolve(url), { concurrency })
-    .then(results => results.filter(r => is.existy(r)))
-    .nodeify(callback);
-}
+  return Promise.map(this.ensureUrls(urls), url => this.tryResolve(url), { concurrency })
+    .then(results => results.filter(r => is.existy(r)));
+};
 
-function tryResolve(url) {
-  console.log(url);
-  return new Promise((resolve, reject) => {
-    let match = null;
+/**
+ * Tries to resolve oEmbed information for a URL
+ *
+ * @param {String} url
+ * @returns {Promise<Object>}
+ */
+Embedify.prototype.tryResolve = function tryResolve(url) {
+  return Promise.resolve()
+    .then(() => {
+      let match = null;
 
-    providers.some(provider => {
-      console.log(provider.apiUrl);
+      providers.some(provider => {
+        provider.regExp.some(re => {
+          const reMatch = url.match(re);
 
-      provider.regExp.some(re => {
-        const reMatch = url.match(re);
-
-        if (is.array(reMatch) && reMatch.length) {
-          match = {
-            url: provider.transform(reMatch),
-            apiUrl: provider.apiUrl,
-          };
-        }
-
+          if (is.array(reMatch) && reMatch.length) {
+            match = {
+              url: provider.transform(reMatch),
+              apiUrl: provider.apiUrl,
+            };
+          }
+          return is.existy(match);
+        });
         return is.existy(match);
       });
 
-      return is.existy(match);
+      return match ? this.fetch(match.apiUrl, match.url) : null;
     });
+};
 
-    if (match) {
-      console.log(match);
-      fetch(match.apiUrl, { url: match.url })
-        .then(resolve)
-        .catch(reject);
-    } else {
-      resolve(null);
-    }
-  });
-}
+/**
+ * Ensures that URLs are valido
+ *
+ * @param {String|Array} urls
+ * @returns {Promise<Array>}
+ */
+Embedify.prototype.ensureUrls = function ensureUrls(urls) {
+  return Promise.resolve()
+    .then(() => {
+      if (is.all.uri(urls)) {
+        return urls;
+      } else if (is.uri(urls)) {
+        return [urls];
+      }
 
-function ensureUrls(urls) {
-  if (is.all.uri(urls)) {
-    return urls;
-  } else if (is.uri(urls)) {
-    return [urls];
-  }
+      throw new TypeError('Invalid URL or list of URLs');
+    });
+};
 
-  throw new TypeError('Invalid URL or list of URLs');
-}
+/**
+ * Performs HTTP request
+ *
+ * @param {String} apiUrl
+ * @param {String} matchUrl
+ * @returns {Promise}
+ */
+Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
+  return Promise.resolve()
+    .then(() => {
+      const options = {
+        query: { url: matchUrl },
+        headers: { 'User-Agent': 'Embedify' },
+        json: true,
+      };
+
+      return this.client(apiUrl, options)
+        .then(res => res.body)
+        .catch(err => {
+          throw new this.ContentRequestError(err.message);
+        });
+    });
+};
 
 // Public
-module.exports = get;
-module.exports.providers = providers;
+module.exports.create = create;

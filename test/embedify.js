@@ -7,21 +7,58 @@ const embedify = require('../index');
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-describe('Embedify Get', () => {
+describe('Embedify', () => {
+  let oEmbed;
+
+  before(() => {
+    oEmbed = embedify.create();
+  });
+
+  it('should return TypeError if url is invalid', () => {
+    const urls = 123;
+
+    return expect(oEmbed.get(urls))
+      .to.be.rejectedWith(TypeError);
+  });
+
+  it('should return [] for unknown providers', () => {
+    const url = 'https://www.unknown.com/embed/iOf7CsxmFCs';
+
+    return expect(oEmbed.get(url))
+      .to.eventually.be.fulfilled
+      .then(result => expect(result).to.deep.equal([]));
+  });
+
+  it('should ensure list of valid URLs', () => {
+    const url = 'https://www.test.com/embed/iOf7CsxmFCs';
+
+    return expect(oEmbed.ensureUrls([url]))
+      .to.eventually.be.fulfilled
+      .then(result => expect(result).to.deep.equal([url]));
+  });
+
+  it('should ensure list of valid URLs from URL', () => {
+    const url = 'https://www.test.com/embed/iOf7CsxmFCs';
+
+    return expect(oEmbed.ensureUrls(url))
+      .to.eventually.be.fulfilled
+      .then(result => expect(result).to.deep.equal([url]));
+  });
+
+  it('should be rejected with TypeError for invalid URL', () => {
+    const url = 123;
+
+    return expect(oEmbed.ensureUrls(url))
+      .to.be.rejectedWith(TypeError);
+  });
+
+  /*
   it('should return result if matchUrls is valid string', () => {
     const matchUrls = 'https://www.youtube.com/embed/iOf7CsxmFCs';
 
     return expect(embedify.get(matchUrls))
       .to.eventually.be.fulfilled
       .then(result => expect(result[0].type).to.equal('video'));
-  });
-
-  it('should return null for unknown providers', () => {
-    const matchUrls = 'https://www.unknown.com/embed/iOf7CsxmFCs';
-
-    return expect(embedify.get(matchUrls))
-      .to.eventually.be.fulfilled
-      .then(result => expect(result).to.equal.null);
   });
 
   it('should return result if matchUrls is valid array', () => {
@@ -156,35 +193,5 @@ describe('Embedify Get', () => {
         return expect(result).to.deep.equal(expectedResult);
       });
   });
-});
-
-describe('Embedify Get Errors', () => {
-  it('should return TypeError if matchUrls is null', () => {
-    const matchUrls = null;
-    return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(TypeError);
-  });
-
-  it('should return TypeError if matchUrls is undefined', () => {
-    return expect(embedify.get())
-      .to.be.rejectedWith(TypeError);
-  });
-
-  it('should return TypeError if matchUrls is number', () => {
-    const matchUrls = 123;
-    return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(TypeError);
-  });
-
-  it('should return TypeError if matchUrls is object', () => {
-    const matchUrls = {};
-    return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(TypeError);
-  });
-
-  it('should return TypeError if matchUrls is non-string array', () => {
-    const matchUrls = [123, {}];
-    return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(TypeError);
-  });
+  */
 });

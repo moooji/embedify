@@ -2,11 +2,8 @@
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const embedify = require('../index');
 const server = require('./server');
-const fetch = require('../lib/fetch');
-const errors = require('../lib/errors');
-
-const ContentRequestError = errors.ContentRequestError;
 
 const serverPort = 3200;
 const serverUrl = `http://127.0.0.1:${serverPort}/`;
@@ -16,22 +13,19 @@ chai.use(chaiAsPromised);
 
 describe('Fetch', () => {
   let app;
+  let oEmbed;
 
   before(() => {
     app = server(serverPort);
+    oEmbed = embedify.create();
   });
 
   after(() => app.close());
 
-  it('should return TypeError if website url is not valid', () => {
-    const contentUrl = 123;
-    return expect(fetch(contentUrl))
-      .to.be.rejectedWith(TypeError);
-  });
+  it('should be rejected with ContentRequestError if status code is >400', () => {
+    const url = `${serverUrl}status/404`;
 
-  it('should return ContentRequestError if status code is >400', () => {
-    const contentUrl = `${serverUrl}status/404`;
-    return expect(fetch(contentUrl))
-      .to.be.rejectedWith(ContentRequestError);
+    return expect(oEmbed.fetch(url))
+      .to.be.rejectedWith(oEmbed.ContentRequestError);
   });
 });
