@@ -1,5 +1,3 @@
-const provider = require('../lib/provider');
-
 const apiUrl = 'http://soundcloud.com/oembed';
 
 const regExp = [
@@ -11,4 +9,4 @@ function transform(match) {
   return match[1].replace('%3A//', '://');
 }
 
-module.exports = provider.create(apiUrl, regExp, transform);
+module.exports = { apiUrl, regExp, transform };

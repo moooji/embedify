@@ -1,5 +1,3 @@
-const provider = require('../lib/provider');
-
 const apiUrl = 'http://www.youtube.com/oembed';
 
 const regExp = [
@@ -16,4 +14,4 @@ function transform(match) {
   return `https://www.youtube.com/watch?v=${match[1]}`;
 }
 
-module.exports = provider.create(apiUrl, regExp, transform);
+module.exports = { apiUrl, regExp, transform };

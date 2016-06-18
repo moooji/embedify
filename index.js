@@ -1,13 +1,24 @@
 'use strict';
 
-const _ = require('lodash');
-const Bluebird = require('bluebird');
+const is = require('valido');
+const Promise = require('bluebird');
+const fetch = require('./lib/fetch');
 
-const providers = new Map();
-providers.set('soundcloud', require('./plugins/soundcloud'));
-providers.set('spotify', require('./plugins/spotify'));
-providers.set('vimeo', require('./plugins/vimeo'));
-providers.set('youtube', require('./plugins/youtube'));
+const soundcloud = require('./providers/soundcloud');
+const spotify = require('./providers/spotify');
+const vimeo = require('./providers/vimeo');
+const youtube = require('./providers/youtube');
+const providers = [soundcloud, spotify, vimeo, youtube];
+
+const concurrency = 10;
+
+const test = 'https://w.soundcloud.com/player/?url=' +
+  'https%3A//api.soundcloud.com/tracks/217027580&auto_play=false&hide_related=false' +
+  '&show_comments=true&show_user=true&show_reposts=false&visual=true';
+
+get([test, test])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
 
 /**
  * Gets the oEmbed information for a URL
@@ -18,58 +29,42 @@ providers.set('youtube', require('./plugins/youtube'));
  * @returns {Promise}
  */
 
-function getMulti(urls, callback) {
-  return Bluebird.resolve(urls)
-    .then(() => urls.map(url => this.get(url)))
-    .settle()
-    .then(results => {
-      // results is a PromiseInspection array
-      // this is reached once the operations are all done, regardless if
-      // they're successful or not.
-
-      const oEmbeds = [];
-
-      results.forEach(result => {
-        if (result.isFulfilled()) {
-          // Return the oEmbed information
-          oEmbeds.push(result.value());
-
-        } else if (result.isRejected()) {
-          // TODO: Do something with 404s etc.
-          //result.reason()
-        }
-      });
-
-      return oEmbeds;
-    })
+function get(urls, callback) {
+  return Promise.map(urls, url => tryResolve(url), { concurrency })
+    .then(results => results.filter(r => is.existy(r)))
     .nodeify(callback);
 }
 
+function tryResolve(url) {
+  return new Promise((resolve, reject) => {
+    let match = null;
 
-function get(url) {
-  return Bluebird.resolve()
-    .then(() => providers.map(provider => provider.get(url)))
-    .settle()
-    .then(results => {
-      // results is a PromiseInspection array
-      // this is reached once the operations are all done, regardless if
-      // they're successful or not.
+    providers.some(provider => {
+      provider.regExp.some(re => {
+        const reMatch = url.match(re);
 
-      const oEmbeds = [];
-
-      results.forEach(result => {
-        if (result.isFulfilled()) {
-          oEmbeds.push(result.value());
-        } else if (result.isRejected()) {
-          // TODO: Do something with 404s etc.
-          // result.reason()
+        if (is.array(reMatch) && reMatch.length) {
+          match = {
+            url: provider.transform(reMatch),
+            apiUrl: provider.apiUrl,
+          };
         }
+
+        return is.existy(match);
       });
 
-      return oEmbeds;
+      return is.existy(match);
     });
+
+    if (match) {
+      fetch(match.apiUrl, { url: match.url })
+        .then(resolve)
+        .catch(reject);
+    } else {
+      resolve(null);
+    }
+  });
 }
 
 // Public
-module.exports.get = getMulti;
-module.exports.providers = providers;
+module.exports = get;

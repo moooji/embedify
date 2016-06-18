@@ -4,7 +4,6 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const embedify = require('../index');
 
-const InvalidArgumentError = embedify.InvalidArgumentError;
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
@@ -160,32 +159,32 @@ describe('Embedify Get', () => {
 });
 
 describe('Embedify Get Errors', () => {
-  it('should return InvalidArgumentError if matchUrls is null', () => {
+  it('should return TypeError if matchUrls is null', () => {
     const matchUrls = null;
     return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(InvalidArgumentError);
+      .to.be.rejectedWith(TypeError);
   });
 
-  it('should return InvalidArgumentError if matchUrls is undefined', () => {
+  it('should return TypeError if matchUrls is undefined', () => {
     return expect(embedify.get())
-      .to.be.rejectedWith(InvalidArgumentError);
+      .to.be.rejectedWith(TypeError);
   });
 
-  it('should return InvalidArgumentError if matchUrls is number', () => {
+  it('should return TypeError if matchUrls is number', () => {
     const matchUrls = 123;
     return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(InvalidArgumentError);
+      .to.be.rejectedWith(TypeError);
   });
 
-  it('should return InvalidArgumentError if matchUrls is object', () => {
+  it('should return TypeError if matchUrls is object', () => {
     const matchUrls = {};
     return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(InvalidArgumentError);
+      .to.be.rejectedWith(TypeError);
   });
 
-  it('should return InvalidArgumentError if matchUrls is non-string array', () => {
+  it('should return TypeError if matchUrls is non-string array', () => {
     const matchUrls = [123, {}];
     return expect(embedify.get(matchUrls))
-      .to.be.rejectedWith(InvalidArgumentError);
+      .to.be.rejectedWith(TypeError);
   });
 });

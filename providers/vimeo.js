@@ -1,5 +1,3 @@
-const provider = require('../lib/provider');
-
 const apiUrl = 'https://vimeo.com/api/oembed.json';
 
 const regExp = [
@@ -11,4 +9,4 @@ function transform(match) {
   return `https://www.vimeo.com/${match[1]}`;
 }
 
-module.exports = provider.create(apiUrl, regExp, transform);
+module.exports = { apiUrl, regExp, transform };
