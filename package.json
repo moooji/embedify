@@ -1,6 +1,6 @@
 {
   "name": "embedify",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "oEmbed provider",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,6 @@
     "bluebird": "^3.4.1",
     "custom-error-generator": "^7.0.0",
     "got": "^6.3.0",
-    "request": "^2.72.0",
     "valido": "^2.0.9"
   },
   "devDependencies": {
