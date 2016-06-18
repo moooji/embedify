@@ -89,9 +89,9 @@ Embedify.prototype.tryResolve = function tryResolve(url) {
 Embedify.prototype.ensureUrls = function ensureUrls(urls) {
   return Promise.resolve()
     .then(() => {
-      if (is.all.uri(urls)) {
+      if (is.all.string(urls)) {
         return urls;
-      } else if (is.uri(urls)) {
+      } else if (is.string(urls)) {
         return [urls];
       }
 
