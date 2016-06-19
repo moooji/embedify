@@ -58,9 +58,7 @@ oEmbed.get(urls)
 Creates new Embedify instance.
 
 #### options
-
 ##### parse
-
 Type: `boolean`
 Default: `true`
 
@@ -93,10 +91,9 @@ Default: `10`
 Sets the maximum number of concurrent HTTP requests to provider APIs. 
 
 ### oEmbed.get(urls)
-Returns a Promise and resolves to oEmbed information for all URLs that matched a provider (Soundcloud, Spotify, Vimeo and Youtube).
+Returns a Promise and resolves to oEmbed information for all URLs that matched a provider.
 
 ##### urls
-
 Type: `string` or `array<string>`
 
 URL or list of URLs to get oEmbed information for.
