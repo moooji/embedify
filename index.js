@@ -11,7 +11,7 @@ const vimeo = require('./providers/vimeo');
 const youtube = require('./providers/youtube');
 const providers = [soundcloud, spotify, vimeo, youtube];
 
-const ContentRequestError = createError('ContentRequestError');
+const ProviderRequestError = createError('ProviderRequestError');
 
 /**
  * Factory that return Embedify instance
@@ -30,8 +30,9 @@ function create(options) {
  */
 function Embedify(options) {
   this.providers = providers;
-  this.ContentRequestError = ContentRequestError;
+  this.ProviderRequestError = ProviderRequestError;
   this.parse = !(options && options.parse === false);
+  this.failHard = options && options.failHard === true;
   this.client = options && options.client ? options.client : axios;
   this.concurrency = options && is.natural(options.concurrency) ? options.concurrency : 10;
 }
@@ -118,7 +119,13 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
       return this.client.get(apiUrl, options)
         .then(res => this.format(res))
         .catch(err => {
-          throw new this.ContentRequestError(err.message);
+          // Return empty result for 404
+          // if failHard option is not set
+          if (err.status !== 404 || this.failHard) {
+            throw new this.ProviderRequestError(err.message);
+          }
+
+          return null;
         });
     });
 };
