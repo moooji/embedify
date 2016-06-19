@@ -150,13 +150,19 @@ Embedify.prototype.format = function format(response) {
     version: oEmbed.version ? oEmbed.version.toString() : null,
     title: oEmbed.title || null,
     html: oEmbed.html || null,
-    authorName: oEmbed.author_name || null,
-    authorUrl: oEmbed.author_url || null,
-    providerName: oEmbed.provider_name || null,
-    providerUrl: oEmbed.provider_url || null,
-    thumbnailUrl: oEmbed.thumbnail_url || null,
-    thumbnailWidth: parseInt(oEmbed.thumbnail_width, 10) || null,
-    thumbnailHeight: parseInt(oEmbed.thumbnail_height, 10) || null,
+    author: {
+      name: oEmbed.author_name || null,
+      url: oEmbed.author_url || null,
+    },
+    provider: {
+      name: oEmbed.provider_name || null,
+      url: oEmbed.provider_url || null,
+    },
+    image: {
+      url: oEmbed.thumbnail_url || null,
+      width: parseInt(oEmbed.thumbnail_width, 10) || null,
+      height: parseInt(oEmbed.thumbnail_height, 10) || null,
+    },
     width: parseInt(oEmbed.width, 10) || null,
     height: parseInt(oEmbed.height, 10) || null,
   };

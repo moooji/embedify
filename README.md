@@ -65,24 +65,46 @@ Default: `true`
 By default, the provider's response will be parsed so that all keys are `camelCase` and the following schema is ensured:
 
 ````
-{ 
+[{ 
   type: string,
   version: string,
   title: string,
   html: string,
-  authorName: string,
-  authorUrl: string,
-  providerName: string,
-  providerUrl: string,
-  thumbnailUrl: string,
-  thumbnailWidth: number,
-  thumbnailHeight: number,
+  author: {
+    name: string,
+    url: string,
+  },
+  provider: {
+    name: string,
+    url: string,
+  },
+  image: {
+    url: string,
+    width: number,
+    height: number,
+  },
   width: number,
-  height: number 
-} 
+  height: number,
+}]
 ````
 
-If `parse` is set to `false` the raw response will be returned instead.
+If `parse` is set to `false` the raw response will be returned instead like for example:
+
+````
+[{
+  provider_url: 'https://www.spotify.com',
+  version: '1.0',
+  thumbnail_width: 300,
+  height: 380,
+  thumbnail_height: 300,
+  title: ' - ',
+  width: 300,
+  thumbnail_url: 'https://d3rt1990lpmkn.cloudfront.net/cover/',
+  provider_name: 'Spotify',
+  type: 'rich',
+  html: '<iframe src="https://embed.spotify.com/?uri=spotify:track:sdfgerh" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>'
+}]
+````
 
 ##### failSoft
 Type: `boolean`

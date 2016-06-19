@@ -25,18 +25,24 @@ const rawData = {
 
 const parsedData = {
   type: 'video',
-  thumbnailWidth: 480,
-  thumbnailHeight: 360,
-  providerName: 'YouTube',
-  title: '☼ Min sommer road trip | Del 1 ☼',
-  providerUrl: 'https://www.youtube.com/',
   version: '1.0',
-  authorName: 'Amanda MIDK',
-  height: 270,
-  authorUrl: 'https://www.youtube.com/user/AmandaS4G',
+  title: '☼ Min sommer road trip | Del 1 ☼',
   html: '<iframe width="480" height="270" src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" frameborder="0" allowfullscreen></iframe>',
+  author: {
+    name: 'Amanda MIDK',
+    url: 'https://www.youtube.com/user/AmandaS4G',
+  },
+  provider: {
+    name: 'YouTube',
+    url: 'https://www.youtube.com/',
+  },
+  image: {
+    url: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
+    width: 480,
+    height: 360,
+  },
   width: 480,
-  thumbnailUrl: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
+  height: 270,
 };
 
 // Mock client
