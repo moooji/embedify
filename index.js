@@ -32,7 +32,7 @@ function Embedify(options) {
   this.providers = providers;
   this.ProviderRequestError = ProviderRequestError;
   this.parse = !(options && options.parse === false);
-  this.failHard = options && options.failHard === true;
+  this.failSoft = options && options.failSoft === true;
   this.client = options && options.client ? options.client : axios;
   this.concurrency = options && is.natural(options.concurrency) ? options.concurrency : 10;
 }
@@ -120,12 +120,12 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
         .then(res => this.format(res))
         .catch(err => {
           // Return empty result for 404
-          // if failHard option is not set
-          if (err.status !== 404 || this.failHard) {
-            throw new this.ProviderRequestError(err.message);
+          // if false option is set
+          if (err.status === 404 && this.failSoft) {
+            return null;
           }
 
-          return null;
+          throw new this.ProviderRequestError(err.message);
         });
     });
 };

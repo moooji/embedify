@@ -84,11 +84,11 @@ By default, the provider's response will be parsed so that all keys are `camelCa
 
 If `parse` is set to `false` the raw response will be returned instead.
 
-##### failHard
+##### failSoft
 Type: `boolean`
 Default: `false`
 
-By default, `404` responses from provider APIs will not be thrown and the result will be empty. This can happen when for example a video has been removed from Youtube etc. In this case Embedify will resolve normally and not return a result for that particular URL. If `failHard` is set to `true`, the Promise will be rejected with a `ProviderRequestError` instead;
+By default, `404` responses from provider APIs (when for example a video has been removed from Youtube etc.) will make Embedify reject the Promise with a `ProviderRequestError`. In cases where an empty result is preferred, `failSoft` can be set to `true` and Embedify will resolve normally with no/empty result for that particular URL.
 
 ##### concurrency
 Type: `number`
