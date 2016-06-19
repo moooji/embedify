@@ -25,32 +25,48 @@ oEmbed.get(urls)
 
 ### Result
 ````
-[ { type: 'video',
-    version: '1.0',
-    title: '☼ Min sommer road trip | Del 1 ☼',
-    html: '<iframe width="480" height="270" src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" frameborder="0" allowfullscreen></iframe>',
-    authorName: 'Amanda MIDK',
-    authorUrl: 'https://www.youtube.com/user/AmandaS4G',
-    providerName: 'YouTube',
-    providerUrl: 'https://www.youtube.com/',
-    thumbnailUrl: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
-    thumbnailWidth: 480,
-    thumbnailHeight: 360,
-    width: 480,
-    height: 270 },
-  { type: 'rich',
-    version: '1.0',
-    title: 'Avicii - The Days',
-    html: '<iframe src="https://embed.spotify.com/?uri=spotify:track:4th1RQAelzqgY7wL53UGQt" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>',
-    authorName: null,
-    authorUrl: null,
-    providerName: 'Spotify',
-    providerUrl: 'https://www.spotify.com',
-    thumbnailUrl: 'https://d3rt1990lpmkn.cloudfront.net/cover/f8717f432506ab213c4de0c66d6ac24cd07ecf72',
-    thumbnailWidth: 300,
-    thumbnailHeight: 300,
+[{  
+  type: 'rich',
+  version: '1.0',
+  title: 'Avicii - The Days',
+  html: '<iframe src="https://embed.spotify.com/?uri=spotify:track:4th1RQAelzqgY7wL53UGQt" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>',
+  author: { 
+    name: null, 
+    url: null 
+  },
+  provider: { 
+    name: 'Spotify', 
+    url: 'https://www.spotify.com' 
+  },
+  image: { 
+    url: 'https://d3rt1990lpmkn.cloudfront.net/cover/f8717f432506ab213c4de0c66d6ac24cd07ecf72',
     width: 300,
-    height: 380 } ]
+    height: 300 
+  },
+  width: 300,
+  height: 380
+},
+{ 
+  type: 'rich',
+  version: '1.0',
+  title: ' - ',
+  html: '<iframe src="https://embed.spotify.com/?uri=spotify:track:sdfgerh" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>',
+  author: { 
+    name: null, 
+    url: null 
+  },
+  provider: { 
+    name: 'Spotify', 
+    url: 'https://www.spotify.com' 
+  },
+  image: { 
+    url: 'https://d3rt1990lpmkn.cloudfront.net/cover/',
+    width: 300,
+    height: 300 
+  },
+  width: 300,
+  height: 380
+}]
 ````
 
 ## API
