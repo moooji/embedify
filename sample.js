@@ -5,7 +5,7 @@ const url = [
   'https://play.spotify.com/track/4th1RQAelzqgY7wL53UGQt',
 ];
 
-const oEmbed = embedify.create();
+const oEmbed = embedify.create({ parse: true });
 
 oEmbed.get(url)
   .then(res => console.log(res))

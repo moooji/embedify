@@ -31,7 +31,7 @@ function create(options) {
 function Embedify(options) {
   this.providers = providers;
   this.ContentRequestError = ContentRequestError;
-  this.prettify = options && options.prettify === true;
+  this.parse = !(options && options.parse === false);
   this.client = options && options.client ? options.client : axios;
   this.concurrency = options && is.natural(options.concurrency) ? options.concurrency : 10;
 }
@@ -133,13 +133,13 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
 Embedify.prototype.format = function format(response) {
   const oEmbed = response.data;
 
-  if (!this.prettify) {
+  if (!this.parse) {
     return oEmbed;
   }
 
   return {
     type: oEmbed.type || null,
-    version: oEmbed.version.toString() || null,
+    version: oEmbed.version ? oEmbed.version.toString() : null,
     title: oEmbed.title || null,
     html: oEmbed.html || null,
     authorName: oEmbed.author_name || null,

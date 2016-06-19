@@ -93,23 +93,20 @@ describe('Embedify', () => {
   });
 });
 
-describe('Embedify - Pretty Format', () => {
+describe('Embedify - Parse oEmbed', () => {
   const client = new MockClient(rawData);
   const url = 'https://play.spotify.com/track/4th1RQAelzqgY7wL53UGQt';
 
   it('should return raw oEmbed', () => {
-    const oEmbed = embedify.create({ client });
+    const oEmbed = embedify.create({ client, parse: false });
 
     return expect(oEmbed.get(url))
       .to.be.eventually.fulfilled
       .then(res => expect(res).to.deep.equal([rawData]));
   });
 
-  it('should return pretty oEmbed', () => {
-    const oEmbed = embedify.create({
-      client,
-      prettify: true,
-    });
+  it('should return parsed oEmbed', () => {
+    const oEmbed = embedify.create({ client, parse: true });
 
     return expect(oEmbed.get(url))
       .to.be.eventually.fulfilled
