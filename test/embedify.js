@@ -23,7 +23,7 @@ const rawData = {
   thumbnail_url: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
 };
 
-const prettyData = {
+const parsedData = {
   type: 'video',
   thumbnailWidth: 480,
   thumbnailHeight: 360,
@@ -110,6 +110,6 @@ describe('Embedify - Parse oEmbed', () => {
 
     return expect(oEmbed.get(url))
       .to.be.eventually.fulfilled
-      .then(res => expect(res).to.deep.equal([prettyData]));
+      .then(res => expect(res).to.deep.equal([parsedData]));
   });
 });
