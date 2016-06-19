@@ -1,7 +1,7 @@
 {
   "name": "embedify",
   "version": "1.0.5",
-  "description": "oEmbed provider",
+  "description": "oEmbed library for Soundcloud, Spotify, Vimeo and Youtube",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -19,7 +19,8 @@
     "youtube",
     "vimeo",
     "soundcloud",
-    "spotify"
+    "spotify",
+    "embed"
   ],
   "author": "Steffen Strätz",
   "license": "MIT",

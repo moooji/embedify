@@ -8,7 +8,7 @@ Simple and robust oEmbed library. Fetches oEmbed information for Soundcloud, Spo
 
 ## Usage
 ````
-const embedify = require('./index');
+const embedify = require('embedify');
 
 const options = { parse: true };
 const oEmbed = embedify.create(options);
@@ -54,7 +54,6 @@ oEmbed.get(urls)
 ````
 
 ## API
----
 ### embedify.create([options])
 Creates new Embedify instance.
 
@@ -88,7 +87,6 @@ By default, the provider's response will be parsed so that all keys are `camelCa
 If `parse` is set to `false` the raw response will be returned instead.
 
 ##### concurrency
-
 Type: `number`
 Default: `10`
 
