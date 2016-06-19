@@ -125,7 +125,8 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
             return null;
           }
 
-          throw new this.ProviderRequestError(err.message);
+          const message = `Item does not exist [${matchUrl}]. Set 'failSoft' option to ignore.`;
+          throw new this.ProviderRequestError(message);
         });
     });
 };
