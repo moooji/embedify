@@ -88,7 +88,7 @@ If `parse` is set to `false` the raw response will be returned instead.
 Type: `boolean`
 Default: `false`
 
-By default, 404 responses from provider APIs will not be thrown and the result will be empty. This can happen when for example a video has been removed from Youtube etc. In this case Embedify will resolve normally and not return a result for that URL. If `failHard` is set to `true`, the Promise will be rejected with a `ProviderRequestError` instead;
+By default, `404` responses from provider APIs will not be thrown and the result will be empty. This can happen when for example a video has been removed from Youtube etc. In this case Embedify will resolve normally and not return a result for that URL. If `failHard` is set to `true`, the Promise will be rejected with a `ProviderRequestError` instead;
 
 ##### concurrency
 Type: `number`
