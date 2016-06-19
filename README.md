@@ -25,7 +25,28 @@ oEmbed.get(urls)
 
 ### Result
 ````
-[{  
+[{ 
+  type: 'video',
+  version: '1.0',
+  title: '☼ Min sommer road trip | Del 1 ☼',
+  html: '<iframe width="480" height="270" src="https://www.youtube.com/embed/iOf7CsxmFCs?feature=oembed" frameborder="0" allowfullscreen></iframe>',
+  author: { 
+    name: 'Amanda MIDK',
+    url: 'https://www.youtube.com/user/AmandaS4G'
+  },
+  provider: { 
+    name: 'YouTube', 
+    url: 'https://www.youtube.com/' 
+  },
+  image: { 
+    url: 'https://i.ytimg.com/vi/iOf7CsxmFCs/hqdefault.jpg',
+    width: 480,
+    height: 360 
+  },
+  width: 480,
+  height: 270
+},
+{  
   type: 'rich',
   version: '1.0',
   title: 'Avicii - The Days',
@@ -40,27 +61,6 @@ oEmbed.get(urls)
   },
   image: { 
     url: 'https://d3rt1990lpmkn.cloudfront.net/cover/f8717f432506ab213c4de0c66d6ac24cd07ecf72',
-    width: 300,
-    height: 300 
-  },
-  width: 300,
-  height: 380
-},
-{ 
-  type: 'rich',
-  version: '1.0',
-  title: ' - ',
-  html: '<iframe src="https://embed.spotify.com/?uri=spotify:track:sdfgerh" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>',
-  author: { 
-    name: null, 
-    url: null 
-  },
-  provider: { 
-    name: 'Spotify', 
-    url: 'https://www.spotify.com' 
-  },
-  image: { 
-    url: 'https://d3rt1990lpmkn.cloudfront.net/cover/',
     width: 300,
     height: 300 
   },
