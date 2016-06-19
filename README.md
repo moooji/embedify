@@ -62,7 +62,7 @@ Creates new Embedify instance.
 Type: `boolean`
 Default: `true`
 
-By default, the provider's response will be parsed so that all keys are `camelCase` and the following schema is ensured:
+By default, the provider's response will be parsed so that the following schema is ensured:
 
 ````
 [{ 
