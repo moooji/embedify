@@ -117,7 +117,7 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
       };
 
       return this.client.get(apiUrl, options)
-        .then(res => this.format(res))
+        .then(res => this.parseResponse(res))
         .catch(err => {
           // Return empty result for 404
           // if false option is set
@@ -132,13 +132,13 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
 };
 
 /**
- * Formats the oEmbed response
+ * Parses the oEmbed response
  *
  * @param {Object} response
  * @param {boolean} shouldBePretty
  * @returns {Object}
  */
-Embedify.prototype.format = function format(response) {
+Embedify.prototype.parseResponse = function parseResponse(response) {
   const oEmbed = response.data;
 
   if (!this.parse) {
