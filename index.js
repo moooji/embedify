@@ -82,7 +82,7 @@ Embedify.prototype.tryResolve = function tryResolve(url) {
 };
 
 /**
- * Ensures that URLs are valido
+ * Ensures that URLs are valid
  *
  * @param {String|Array} urls
  * @returns {Promise<Array>}
@@ -146,25 +146,25 @@ Embedify.prototype.parseResponse = function parseResponse(response) {
   }
 
   return {
-    type: oEmbed.type || null,
-    version: oEmbed.version ? oEmbed.version.toString() : null,
-    title: oEmbed.title || null,
-    html: oEmbed.html || null,
+    type: oEmbed.type,
+    version: oEmbed.version ? oEmbed.version.toString() : undefined,
+    title: oEmbed.title,
+    html: oEmbed.html,
     author: {
-      name: oEmbed.author_name || null,
-      url: oEmbed.author_url || null,
+      name: oEmbed.author_name,
+      url: oEmbed.author_url,
     },
     provider: {
-      name: oEmbed.provider_name || null,
-      url: oEmbed.provider_url || null,
+      name: oEmbed.provider_name,
+      url: oEmbed.provider_url,
     },
     image: {
-      url: oEmbed.thumbnail_url || null,
-      width: parseInt(oEmbed.thumbnail_width, 10) || null,
-      height: parseInt(oEmbed.thumbnail_height, 10) || null,
+      url: oEmbed.thumbnail_url,
+      width: parseInt(oEmbed.thumbnail_width, 10),
+      height: parseInt(oEmbed.thumbnail_height, 10),
     },
-    width: parseInt(oEmbed.width, 10) || null,
-    height: parseInt(oEmbed.height, 10) || null,
+    width: parseInt(oEmbed.width, 10),
+    height: parseInt(oEmbed.height, 10),
   };
 };
 
