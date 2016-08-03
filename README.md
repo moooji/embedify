@@ -51,10 +51,7 @@ oEmbed.get(urls)
   version: '1.0',
   title: 'Avicii - The Days',
   html: '<iframe src="https://embed.spotify.com/?uri=spotify:track:4th1RQAelzqgY7wL53UGQt" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>',
-  author: { 
-    name: null, 
-    url: null 
-  },
+  author: {},
   provider: { 
     name: 'Spotify', 
     url: 'https://www.spotify.com' 
