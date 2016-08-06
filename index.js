@@ -119,9 +119,9 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
       return this.client.get(apiUrl, options)
         .then(res => this.parseResponse(res))
         .catch(err => {
-          // Return empty result for 404
+          // Return empty result for HTTP errors
           // if false option is set
-          if (err.status === 404 && this.failSoft) {
+          if (err.status >= 400 && err.status < 500 && this.failSoft) {
             return null;
           }
 

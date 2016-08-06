@@ -1,6 +1,6 @@
 {
   "name": "embedify",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "oEmbed library for Soundcloud, Spotify, Vimeo and Youtube",
   "main": "index.js",
   "scripts": {
