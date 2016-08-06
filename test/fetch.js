@@ -29,27 +29,27 @@ describe('Fetch', () => {
       .then(res => expect(res).to.deep.equal(null));
   });
 
-  it('should be rejected with ProviderRequestError if status is 404 and failSoft -> false', () => {
+  it('should be rejected with RequestError if status is 404 and failSoft -> false', () => {
     const url = `${serverUrl}status/404`;
     const oEmbed = embedify.create({ failSoft: false });
 
     return expect(oEmbed.fetch(url))
-      .to.be.rejectedWith(oEmbed.ProviderRequestError);
+      .to.be.rejectedWith(oEmbed.RequestError);
   });
 
-  it('should be rejected with ProviderRequestError if status is 500 and failSoft -> true', () => {
+  it('should be rejected with RequestError if status is 500 and failSoft -> true', () => {
     const url = `${serverUrl}status/500`;
     const oEmbed = embedify.create({ failSoft: true });
 
     return expect(oEmbed.fetch(url))
-      .to.be.rejectedWith(oEmbed.ProviderRequestError);
+      .to.be.rejectedWith(oEmbed.RequestError);
   });
 
-  it('should be rejected with ProviderRequestError if status is 500 and failSoft -> false', () => {
+  it('should be rejected with RequestError if status is 500 and failSoft -> false', () => {
     const url = `${serverUrl}status/500`;
     const oEmbed = embedify.create({ failSoft: false });
 
     return expect(oEmbed.fetch(url))
-      .to.be.rejectedWith(oEmbed.ProviderRequestError);
+      .to.be.rejectedWith(oEmbed.RequestError);
   });
 });

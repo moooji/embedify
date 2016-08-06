@@ -11,7 +11,7 @@ const vimeo = require('./providers/vimeo');
 const youtube = require('./providers/youtube');
 const providers = [soundcloud, spotify, vimeo, youtube];
 
-const ProviderRequestError = createError('ProviderRequestError');
+const RequestError = createError('RequestError');
 
 /**
  * Factory that return Embedify instance
@@ -30,7 +30,7 @@ function create(options) {
  */
 function Embedify(options) {
   this.providers = providers;
-  this.ProviderRequestError = ProviderRequestError;
+  this.RequestError = RequestError;
   this.parse = !(options && options.parse === false);
   this.failSoft = options && options.failSoft === true;
   this.client = options && options.client ? options.client : axios;
@@ -132,7 +132,7 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
           }
 
           const message = `Item does not exist [${matchUrl}]. Set 'failSoft' option to ignore.`;
-          throw new this.ProviderRequestError(message);
+          throw new this.RequestError(message);
         });
     });
 };
