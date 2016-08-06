@@ -1,6 +1,6 @@
 {
   "name": "embedify",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "oEmbed library for Soundcloud, Spotify, Vimeo and Youtube",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "url": "https://github.com/moooji/embedify/issues"
   },
   "dependencies": {
-    "axios": "^0.12.0",
+    "axios": "^0.13.1",
     "bluebird": "^3.4.1",
     "custom-error-generator": "^7.0.0",
     "valido": "^2.0.14"
@@ -36,13 +36,13 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
-    "eslint": "^3.0.1",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-plugin-import": "^1.10.2",
-    "eslint-plugin-jsx-a11y": "^2.0.0",
-    "eslint-plugin-react": "^5.2.2",
+    "eslint": "^3.2.2",
+    "eslint-config-airbnb": "^10.0.0",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^6.0.0",
     "express": "^4.14.0",
-    "mocha": "^2.5.3",
-    "mocha-eslint": "^2.1.1"
+    "mocha": "^3.0.1",
+    "mocha-eslint": "^3.0.0"
   }
 }

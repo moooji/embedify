@@ -2,7 +2,7 @@
   "plugins": [
     "react"
   ],
-  "extends": "airbnb",
+  //"extends": "airbnb",
   "ecmaFeatures": {
     "jsx": true,
     "modules": true

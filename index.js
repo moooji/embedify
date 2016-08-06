@@ -119,9 +119,15 @@ Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
       return this.client.get(apiUrl, options)
         .then(res => this.parseResponse(res))
         .catch(err => {
-          // Return empty result for HTTP errors
+          // Throw immediately if this is no HTTP error
+          if (!err.response) {
+            throw err;
+          }
+
+          // Return empty result for HTTP 4xx errors
           // if false option is set
-          if (err.status >= 400 && err.status < 500 && this.failSoft) {
+          const statusCode = err.response.status;
+          if (statusCode >= 400 && statusCode < 500 && this.failSoft) {
             return null;
           }
 
