@@ -153,7 +153,7 @@ Embedify.prototype.parseResponse = function parseResponse(response) {
 
   const result = {
     type: oEmbed.type,
-    version: oEmbed.version ? oEmbed.version.toString() : undefined,
+    version: oEmbed.version ? oEmbed.version.toString() : null,
     title: oEmbed.title,
     html: oEmbed.html,
     author: {
@@ -166,11 +166,11 @@ Embedify.prototype.parseResponse = function parseResponse(response) {
     },
     image: {
       url: oEmbed.thumbnail_url,
-      width: parseInt(oEmbed.thumbnail_width, 10),
-      height: parseInt(oEmbed.thumbnail_height, 10),
+      width: parseInt(oEmbed.thumbnail_width, 10) || null,
+      height: parseInt(oEmbed.thumbnail_height, 10) || null,
     },
-    width: parseInt(oEmbed.width, 10),
-    height: parseInt(oEmbed.height, 10),
+    width: parseInt(oEmbed.width, 10) || null,
+    height: parseInt(oEmbed.height, 10) || null,
   };
 
   deepCleanNull(result);
