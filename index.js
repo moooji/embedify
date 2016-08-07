@@ -151,7 +151,7 @@ Embedify.prototype.parseResponse = function parseResponse(response) {
     return oEmbed;
   }
 
-  return {
+  const result = {
     type: oEmbed.type,
     version: oEmbed.version ? oEmbed.version.toString() : undefined,
     title: oEmbed.title,
@@ -172,7 +172,20 @@ Embedify.prototype.parseResponse = function parseResponse(response) {
     width: parseInt(oEmbed.width, 10),
     height: parseInt(oEmbed.height, 10),
   };
+
+  deepCleanNull(result);
+  return result;
 };
+
+function deepCleanNull(obj) {
+  Object.getOwnPropertyNames(obj).forEach((name) => {
+    if (obj[name] === null || obj[name] === undefined) {
+        delete obj[name];
+    } else if (typeof obj[name] === 'object') {
+        deepCleanNull(obj[name]);
+    }
+  });
+}
 
 // Public
 module.exports.create = create;
