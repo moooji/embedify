@@ -1,8 +1,6 @@
 # Embedify
 Simple and robust oEmbed library. Fetches oEmbed information for Soundcloud, Spotify, Vimeo and Youtube links. The library is highly modular and new providers can be added easily (contributions welcome). 
 
-[![Teamcity](https://teamcity.moooji.com/app/rest/builds/buildType:(id:Embedify_Main)/statusIcon?guest=1)](https://teamcity.moooji.com/app/rest/builds/buildType:(id:Embedify_Main)/statusIcon?guest=1)
-
 ## Installing
 `npm install embedify`
 
