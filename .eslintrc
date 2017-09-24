@@ -2,11 +2,6 @@
   "plugins": [
     "react"
   ],
-  //"extends": "airbnb",
-  "ecmaFeatures": {
-    "jsx": true,
-    "modules": true
-  },
   "env": {
     "es6": true,
     "browser": true,
