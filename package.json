@@ -20,7 +20,8 @@
     "vimeo",
     "soundcloud",
     "spotify",
-    "embed"
+    "embed",
+    "mixcloud"
   ],
   "author": "Steffen Strätz",
   "license": "MIT",
