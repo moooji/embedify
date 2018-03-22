@@ -9,7 +9,8 @@ const soundcloud = require('./providers/soundcloud');
 const spotify = require('./providers/spotify');
 const vimeo = require('./providers/vimeo');
 const youtube = require('./providers/youtube');
-const providers = [soundcloud, spotify, vimeo, youtube];
+const mixcloud = require('./providers/mixcloud');
+const providers = [soundcloud, spotify, vimeo, youtube, mixcloud];
 
 const RequestError = createError('RequestError');
 

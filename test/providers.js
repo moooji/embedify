@@ -159,3 +159,25 @@ describe('Youtube', () => {
       .to.be.eventually.fulfilled;
   });
 });
+
+describe("Mixcloud", () => {
+  const apiUrl = "https://www.mixcloud.com/oembed";
+  const matchUrl =
+    "https://www.mixcloud.com/plxplxplx/plx-live-09-77-2017-no-advice-sssichtbeton";
+  const client = new MockClient(apiUrl, matchUrl);
+  const oEmbed = embedify.create({ client });
+
+  it("should match URL 1", () => {
+    const url =
+      "https://www.mixcloud.com/plxplxplx/plx-live-09-77-2017-no-advice-sssichtbeton";
+
+    return expect(oEmbed.get(url)).to.be.eventually.fulfilled;
+  });
+
+  it("should match URL 2", () => {
+    const url =
+      "https://www.mixcloud.com/widget/iframe/?hide_cover=1&feed=https://www.mixcloud.com/plxplxplx/plx-live-09-77-2017-no-advice-sssichtbeton";
+
+    return expect(oEmbed.get(url)).to.be.eventually.fulfilled;
+  });
+});
